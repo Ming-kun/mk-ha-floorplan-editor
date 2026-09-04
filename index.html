@@ -902,27 +902,28 @@ function skyBackdrop(vb){
     var Rm=Math.min(vb[2],vb[3])*0.15;
     var mx=vb[0]+vb[2]*0.78, my=vb[1]+vb[3]*0.22;
     s+='<g opacity="0.78" style="pointer-events:none">';
-    /* 月牙由两条共端点的圆弧直接构成，不做布尔运算。
-       外缘：半径 Rm 的半圆，向右鼓出到 +Rm。
-       内缘：半径 Ri>Rm 的浅弧，同样向右鼓，但只鼓到 +sag（弧越大越平，月牙越细）。
-       两弧共用正上、正下两个端点，夹出的就是一枚真正的单一月牙。
+    /* 月牙 = 本体圆挖掉一个偏移的挖口圆，但**不用 fill-rule 做布尔运算**。
+       evenodd 给的是对称差（A∪B 去掉 A∩B）：挖口圆探出本体之外的那一块照样被填充，
+       渲染出来是两个背对背的月牙。nonzero 也救不了，那块区域绕数非零。
 
-       ⚠️ 不要改回「两个圆做减法 + fill-rule」。evenodd 给的是对称差
-       （A∪B 去掉 A∩B）：挖口圆探出本体之外的那一块同样会被填充，渲染成两个背对背的
-       月牙。nonzero 也救不了——那块区域绕数非零，照样填。要用圆减圆就必须把挖口圆
-       裁进本体，那比这两行弧复杂得多。
+       正确做法是解出两圆交点，再用「本体的外弧 + 挖口圆的内弧」拼一条闭合路径。
+       关键是外弧必须能跨过 180°——尖角才会往里卷。之前用「共端点的半圆 + 浅弧」，
+       外缘恰好是半圆，尖角被钉死在正上正下，包不过半圈，所以看着像月牙又不像。
 
-       厚度 = Rm - sag。Ri=1.06Rm 给出约 0.29Rm，接近常见月牙比例。
-       路径整体左移 ox，使月牙自身的视觉中心落在原点，rotate 才是绕它自己转。
-       -35° 让凹口朝左上，厚的一侧在右下。 */
-    var Ri=Rm*1.06;
-    var sag=Ri-Math.sqrt(Ri*Ri-Rm*Rm);
-    var ox=(sag+Rm)/2;
-    s+='<g transform="translate('+mx.toFixed(1)+','+my.toFixed(1)+') rotate(-35)">'+
-       '<path fill="#E8F0FF" opacity="0.92" d="'+
-       'M '+(-ox).toFixed(1)+','+(-Rm).toFixed(1)+
-       ' A '+Rm.toFixed(1)+','+Rm.toFixed(1)+' 0 0,1 '+(-ox).toFixed(1)+','+Rm.toFixed(1)+
-       ' A '+Ri.toFixed(1)+','+Ri.toFixed(1)+' 0 0,0 '+(-ox).toFixed(1)+','+(-Rm).toFixed(1)+
+       large-arc 标志由张角算出，不手填，改比例时不会填错。 */
+    var mR=Rm, mRb=Rm*0.95, md=Rm*0.28;
+    var ix=-((md*md - mRb*mRb + mR*mR)/(2*md));
+    var iy=Math.sqrt(Math.max(0, mR*mR - ix*ix));
+    var oLarge=(2*Math.atan2(iy,ix)      > Math.PI)?1:0;
+    var iLarge=(2*Math.atan2(iy,ix+md)   > Math.PI)?1:0;
+    /* 把路径左移到自身视觉中心，rotate 才是绕月牙自己转而不是绕本体圆心 */
+    var mox=(ix+mR)/2;
+    var f=function(n){return n.toFixed(1);};
+    s+='<g transform="translate('+mx.toFixed(1)+','+my.toFixed(1)+') rotate(20)">'+
+       '<path fill="#C9D8EE" opacity="0.5" d="'+
+       'M '+f(ix-mox)+','+f(-iy)+
+       ' A '+f(mR)+','+f(mR)+' 0 '+oLarge+',1 '+f(ix-mox)+','+f(iy)+
+       ' A '+f(mRb)+','+f(mRb)+' 0 '+iLarge+',0 '+f(ix-mox)+','+f(-iy)+
        ' Z"/></g>';
     /* 疏星 */
     var st=[[0.10,0.10,2.2],[0.22,0.62,1.5],[0.06,0.78,1.8],[0.40,0.16,1.4],[0.55,0.72,1.9],[0.34,0.44,1.2],[0.90,0.66,1.6],[0.68,0.09,1.3]];
