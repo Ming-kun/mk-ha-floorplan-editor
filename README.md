@@ -1,6 +1,7 @@
 <div align="center">
 
 # 🌙 MK-Smart Home Lab
+### MK-Floorplan-Editor
 
 **Draw your home. Flip the lights. Let Home Assistant deal with the YAML.**
 
