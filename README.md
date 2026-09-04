@@ -6,7 +6,9 @@
 
 One HTML file · no build step · no dependencies · 12 languages
 
-### [▶ Try it right now](https://ming-kun.github.io/mk-ha-floorplan-editor/)
+### [▶ Try it right now](https://mklab.homes/floorplan/)
+
+<sub>Mirror: [ming-kun.github.io](https://ming-kun.github.io/mk-ha-floorplan-editor/) — may be unreachable from mainland China 国内可能打不开</sub>
 
 **[English](#english)**  ·  **[中文](#中文)**
 
@@ -57,7 +59,9 @@ Drag rooms onto the canvas. Drop lights and curtains into them. Hit export. **Th
 
 ### Installing it
 
-There isn't an install. That's not an oversight, it's the whole point.
+Easiest path is [the live demo](https://mklab.homes/floorplan/) — nothing to download.
+
+Otherwise, there isn't an install. That's not an oversight, it's the whole point.
 
 ```bash
 git clone https://github.com/Ming-kun/mk-ha-floorplan-editor.git
@@ -136,7 +140,9 @@ It's rendered as a runtime-assembled SVG string. No canvas, no WebGL, no framewo
 
 ### 怎么装
 
-不用装。这不是偷懒,这就是重点。
+最省事的是[直接打开在线版](https://mklab.homes/floorplan/),什么都不用下。
+
+真要本地跑的话——也不用装。这不是偷懒,这就是重点。
 
 ```bash
 git clone https://github.com/Ming-kun/mk-ha-floorplan-editor.git
