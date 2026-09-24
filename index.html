@@ -176,13 +176,18 @@ button,input,select,textarea{font:inherit; color:inherit}
 .slider .v{font-size:11px; color:var(--ink-3); min-width:34px; text-align:right}
 
 /* ---- entity list ---- */
-.ent{display:grid; grid-template-columns:22px 1fr auto; gap:9px; align-items:center; padding:8px 0; border-bottom:1px solid var(--line-soft)}
+.ent{display:grid; grid-template-columns:22px 1fr auto auto; gap:9px; align-items:center; padding:8px 0; border-bottom:1px solid var(--line-soft)}
 .ent:last-child{border-bottom:0}
 .ent .dot{width:22px; height:22px; border-radius:6px; display:grid; place-items:center; font-size:11px}
 .ent .dot.on{background:var(--lamp-soft); color:var(--lamp)}
 .ent .dot.off{background:var(--surface-3); color:var(--ink-3)}
 .ent .eid{font-size:10.5px; color:var(--ink-3); word-break:break-all}
 .ent .nm{font-size:12px}
+.ent .x{border:0; background:transparent; color:var(--ink-3); cursor:pointer; padding:0 2px; font-size:13px; line-height:1}
+.ent .x:hover{color:var(--ink)}
+textarea.paste{width:100%; min-height:150px; box-sizing:border-box; font-family:"DM Mono",monospace; font-size:11.5px; background:var(--surface-2,var(--surface-3)); border:1px solid var(--line); border-radius:8px; padding:9px; resize:vertical}
+.modal h4{margin:14px 0 6px; font-size:12.5px; font-weight:600}
+.dl{display:flex; flex-wrap:wrap; gap:6px; margin:8px 0}
 .sw-toggle{width:34px; height:19px; border-radius:11px; border:1px solid var(--line); background:var(--surface-3); position:relative; cursor:pointer; padding:0; flex:none}
 .sw-toggle::after{content:""; position:absolute; top:2px; left:2px; width:13px; height:13px; border-radius:50%; background:var(--ink-3); transition:transform .16s ease, background .16s ease}
 .sw-toggle[aria-pressed="true"]{background:var(--accent-soft); border-color:var(--accent)}
@@ -228,6 +233,7 @@ pre.code{
     <div class="spacer"></div>
     <select class="langsel" id="lang" aria-label="Language"></select>
     <button class="btn" id="btn-sample" data-i18n="sample"></button>
+    <button class="btn" id="btn-import" data-i18n="importHa"></button>
     <button class="btn" id="btn-png" data-i18n="exportPng"></button>
     <button class="btn primary" id="btn-ha" data-i18n="exportHa"></button>
   </header>
@@ -301,6 +307,34 @@ pre.code{
    ═══════════════════════════════════════════════════════════ */
 var LANGS=[["en", "English"], ["zh", "中文"], ["fr", "Français"], ["de", "Deutsch"], ["it", "Italiano"], ["es", "Español"], ["pt", "Português"], ["nl", "Nederlands"], ["pl", "Polski"], ["ru", "Русский"], ["ko", "한국어"], ["ja", "日本語"]];
 var I18N={"en": {"lang": "Language","day": "Day","night": "Night","allOn": "All lights on","allOff": "All lights off","sample": "Load sample","exportPng": "Export PNG","exportHa": "Export to Home Assistant","roomBlocks": "Room blocks","devices": "Devices","noRoomSel": "No room selected","dev.ceiling_light": "Smart ceiling light","dev.dimmer": "Dimmer switch","dev.smart_switch": "Smart switch","dev.curtain": "Smart curtain","dev.roller": "Roller blind","h.ceiling_light": "light · brightness + color_temp","h.dimmer": "light · brightness · dims lamps","h.smart_switch": "switch · on/off · controls lamps","h.curtain": "cover · curtain · position","h.roller": "cover · shade · position","room.living": "Living room","room.dining": "Dining room","room.kitchen": "Kitchen","room.master": "Master bedroom","room.bedroom": "Bedroom","room.kids": "Kids room","room.study": "Study","room.bath": "Bathroom","room.balcony": "Balcony","room.entry": "Entryway","room.hall": "Hallway","center": "Fit","pins": "Entity pins","roomNames": "Room names","isoGrid": "Iso grid","delSel": "Delete selected","hud": "Drag room blocks in · rooms auto-space · click a room to select · click a lamp or switch to toggle · press D for day/night","floors": "Floors","addFloor": "+ Add floor","delFloor": "Delete floor","emptyFloor": "empty","moveUp": "Move up","moveDown": "Move down","floorMeta": "{r} rooms · {e} entities","floorName": "Floor {n}","matrix": "Light matrix","now": "Now","global": "Global","gBri": "Light brightness","gCov": "Curtain position","roomsEntities": "Rooms & entities","countFmt": "{r} rooms / {e} entities","noSelHint": "No room selected — showing every entity on this floor.","noEnt": "No entities","delRoom": "Delete room","bri": "Brightness","pos": "Position","roomLabel": "{n} entities · {m} on","noRooms": "No rooms on this floor yet. Drag a room block in from the left.","mx.day": "Day","mx.night": "Night","mx.open": "Open","mx.closed": "Closed","mx.on": "Lights on","mx.off": "Lights off","haTitle": "Export to Home Assistant","haDesc": "Two routes that actually land: picture-elements is a native HA card and works out of the box; ha-floorplan needs HACS but takes this SVG as its base image and binds by entity_id.","tab.img": "Background","close": "Close","copyTab": "Copy this tab","cb.pe": "A native card — nothing to install. Save the PNG to config/www/floorplan/home.png first.","cb.fp": "For the ha-floorplan custom card (install via HACS). Every marker id in the exported SVG is its entity_id.","cb.css": "State stylesheet for ha-floorplan. Put it at config/www/floorplan/home.css.","cb.json": "Agent-friendly scene description, isomorphic to the HA floor / area / entity registry. An AI only has to emit this JSON to produce the render.","cb.img": "Save it to config/www/floorplan/home.png (served at /local/floorplan/home.png). If your browser blocks the download, right-click the image and save it.","pngTitle": "Scene PNG","pngDesc": "If your browser blocks the download (common in previews), right-click the image and save it.","renderFail": "Render failed","t.added": "Added “{n}” with its default devices","t.addedPlain": "Added “{n}”","t.pickRoom": "Select a room first","t.addedEnt": "Added {id}","t.floorOrder": "Floor order updated","t.floorAdded": "Added “{n}” with a living room and a bedroom","t.floorDel": "Deleted “{n}”","t.keepOne": "Keep at least one floor","t.sample": "Sample home loaded","t.copied": "Copied","t.selectCopy": "Selected — press Ctrl/Cmd+C","t.needRooms": "Add a few rooms first","n.day|open|off": "Daylight only. The window casts a crisp cool patch on the floor and shadowed faces lift on bounced light — open, even, medium contrast.","n.day|open|on": "Daylight plus lamps. Two sources stack: brightest of all and the most wasteful, since the lamps only reach where daylight does not — note the warm rim around the window patch.","n.day|closed|off": "Curtains drawn, no lamps. Only diffuse light through the fabric. The picture turns grey and loses direction; furniture shadows all but vanish.","n.day|closed|on": "Curtains drawn, lamps on. The lamp is now the only key light — a full warm pool on the floor and a clear top-to-bottom gradient on the walls.","n.night|open|off": "Night, lamps off, curtains open. Just a trace of moon or street light. Shapes read by silhouette alone and the window is the brightest thing in frame.","n.night|open|on": "Night, lamps on, curtains open. Warm interior against cold blue outside; the window becomes a black hole and the warm pool falls off sharply. The most dramatic state.","n.night|closed|off": "Night, lamps off, curtains drawn. The black baseline, barely enough separation to read outlines — your “nobody home” reference.","n.night|closed|on": "Night, lamps on, curtains drawn. Warm light bounces back off the fabric, falls off slowest and wraps the room. The default picture of “home”.","nameJoin": " "},"zh": {"lang": "语言","day": "白天","night": "黑夜","allOn": "全屋开灯","allOff": "全屋关灯","sample": "载入示例","exportPng": "导出 PNG","exportHa": "导出到 Home Assistant","roomBlocks": "房间方块","devices": "设备","noRoomSel": "未选中房间","dev.ceiling_light": "智能吸顶灯","dev.dimmer": "调光开关","dev.smart_switch": "智能开关","dev.curtain": "智能窗帘","dev.roller": "智能卷帘","h.ceiling_light": "light · brightness + color_temp","h.dimmer": "light · brightness · 控灯调光","h.smart_switch": "switch · 通断 · 控灯","h.curtain": "cover · curtain · position","h.roller": "cover · shade · position","room.living": "客厅","room.dining": "餐厅","room.kitchen": "厨房","room.master": "主卧","room.bedroom": "次卧","room.kids": "儿童房","room.study": "书房","room.bath": "卫生间","room.balcony": "阳台","room.entry": "玄关","room.hall": "走廊","center": "居中","pins": "实体标记","roomNames": "房间名","isoGrid": "等距网格","delSel": "删除所选","hud": "拖房间方块进画布 · 房间之间自动留间隙 · 点房间选中 · 点图上的灯具/开关直接开关 · 按 D 切昼夜","floors": "楼层","addFloor": "+ 加一层","delFloor": "删除本层","emptyFloor": "空","moveUp": "上移","moveDown": "下移","floorMeta": "{r} 房 · {e} 实体","floorName": "{n} 层","matrix": "光效矩阵","now": "当前","global": "全局","gBri": "灯光亮度","gCov": "窗帘开度","roomsEntities": "房间与实体","countFmt": "{r} 房间 / {e} 实体","noSelHint": "未选中房间，显示本层全部实体。","noEnt": "无实体","delRoom": "删除房间","bri": "亮度","pos": "开度","roomLabel": "{n} 实体 · {m} 开启","noRooms": "这层还没有房间。从左栏拖一个房间方块进来。","mx.day": "白天","mx.night": "夜","mx.open": "开帘","mx.closed": "拉帘","mx.on": "开灯","mx.off": "关灯","haTitle": "导出到 Home Assistant","haDesc": "两条真能落地的路径：picture-elements 是 HA 原生卡片、开箱即用；ha-floorplan 需要 HACS，但能直接拿这张 SVG 当底图并按 entity_id 绑定。","tab.img": "背景图","close": "关闭","copyTab": "复制当前标签内容","cb.pe": "原生卡片，不用装任何东西。先把 PNG 存到 config/www/floorplan/home.png。","cb.fp": "给 ha-floorplan 自定义卡片用（HACS 安装）。导出 SVG 里每个标记的 id 就是 entity_id。","cb.css": "ha-floorplan 的状态样式表，放到 config/www/floorplan/home.css。","cb.json": "Agent 友好的场景描述，与 HA 的 floor / area / entity 注册表同构。AI 只要吐出这份 JSON 就能生成效果图。","cb.img": "保存到 config/www/floorplan/home.png（对应 URL /local/floorplan/home.png）。若浏览器阻止下载，右键图片另存为。","pngTitle": "效果图 PNG","pngDesc": "若浏览器阻止下载（预览环境常见），右键图片另存为。","renderFail": "渲染失败","t.added": "已添加「{n}」并预置默认设备","t.addedPlain": "已添加「{n}」","t.pickRoom": "先点选一个房间","t.addedEnt": "已添加 {id}","t.floorOrder": "楼层顺序已调整","t.floorAdded": "已新增「{n}」，预置客厅与主卧","t.floorDel": "已删除「{n}」","t.keepOne": "至少保留一层","t.sample": "已载入示例户型","t.copied": "已复制","t.selectCopy": "已选中，按 Ctrl/Cmd+C 复制","t.needRooms": "先拼几个房间","n.day|open|off": "自然光主导。窗口在地面投出清晰的冷白光斑，背光面靠环境光提亮，整体通透、对比中等。","n.day|open|on": "白天开灯。冷暖两个光源叠加，最亮也最\"浪费\"——灯光只在窗光够不到的角落起作用，光斑边缘出现暖色描边。","n.day|closed|off": "白天拉帘。窗光被挡，只剩布料透出的散射，画面转灰、失去方向感，家具阴影几乎消失。","n.day|closed|on": "白天拉帘开灯。灯光成为唯一主光，地面出现完整的暖色光池，墙面上下形成明显明暗渐变。","n.night|open|off": "夜间无灯开帘。只有窗外月光或路灯的一点冷蓝，仅靠轮廓分辨家具，窗洞是画面最亮的地方。","n.night|open|on": "夜间开灯开帘。室内暖光与窗外冷蓝形成强对比，窗口变成\"黑洞\"，暖光池边缘衰减明显——最有戏剧感的一档。","n.night|closed|off": "夜间关灯拉帘。全黑基准态，只保留极弱的轮廓分离度，用来对照\"人不在家\"的状态。","n.night|closed|on": "夜间开灯拉帘。暖光被布料反射回室内，衰减最慢、包裹感最强，是\"家\"的默认画面。","nameJoin": ""},"fr": {"lang": "Langue","day": "Jour","night": "Nuit","allOn": "Tout allumer","allOff": "Tout éteindre","sample": "Charger l’exemple","exportPng": "Exporter en PNG","exportHa": "Exporter vers Home Assistant","roomBlocks": "Blocs de pièces","devices": "Appareils","noRoomSel": "Aucune pièce sélectionnée","dev.ceiling_light": "Plafonnier connecté","dev.dimmer": "Variateur","dev.smart_switch": "Interrupteur connecté","dev.curtain": "Rideau motorisé","dev.roller": "Store enrouleur","h.ceiling_light": "light · brightness + color_temp","h.dimmer": "light · brightness · variation","h.smart_switch": "switch · marche/arrêt · éclairage","h.curtain": "cover · curtain · position","h.roller": "cover · shade · position","room.living": "Salon","room.dining": "Salle à manger","room.kitchen": "Cuisine","room.master": "Chambre principale","room.bedroom": "Chambre","room.kids": "Chambre d’enfant","room.study": "Bureau","room.bath": "Salle de bain","room.balcony": "Balcon","room.entry": "Entrée","room.hall": "Couloir","center": "Ajuster","pins": "Repères d’entités","roomNames": "Noms des pièces","isoGrid": "Grille iso","delSel": "Supprimer la sélection","hud": "Glissez des blocs · espacement automatique · cliquez une pièce pour la sélectionner · cliquez une lampe ou un interrupteur pour le basculer · touche D pour jour/nuit","floors": "Étages","addFloor": "+ Ajouter un étage","delFloor": "Supprimer l’étage","emptyFloor": "vide","moveUp": "Monter","moveDown": "Descendre","floorMeta": "{r} pièces · {e} entités","floorName": "Étage {n}","matrix": "Matrice lumineuse","now": "Actuel","global": "Global","gBri": "Luminosité","gCov": "Position des rideaux","roomsEntities": "Pièces et entités","countFmt": "{r} pièces / {e} entités","noSelHint": "Aucune pièce sélectionnée — toutes les entités de l’étage sont affichées.","noEnt": "Aucune entité","delRoom": "Supprimer la pièce","bri": "Luminosité","pos": "Position","roomLabel": "{n} entités · {m} allumées","noRooms": "Aucune pièce à cet étage. Glissez-y un bloc depuis la colonne de gauche.","mx.day": "Jour","mx.night": "Nuit","mx.open": "Ouvert","mx.closed": "Fermé","mx.on": "Allumé","mx.off": "Éteint","haTitle": "Exporter vers Home Assistant","haDesc": "Deux voies réellement exploitables : picture-elements est une carte native HA, utilisable telle quelle ; ha-floorplan demande HACS mais prend ce SVG comme fond et lie les éléments par entity_id.","tab.img": "Image de fond","close": "Fermer","copyTab": "Copier cet onglet","cb.pe": "Carte native, rien à installer. Enregistrez d’abord le PNG dans config/www/floorplan/home.png.","cb.fp": "Pour la carte ha-floorplan (via HACS). Dans le SVG exporté, l’id de chaque repère est son entity_id.","cb.css": "Feuille de styles d’état pour ha-floorplan. À placer dans config/www/floorplan/home.css.","cb.json": "Description de scène pensée pour les agents, isomorphe au registre floor / area / entity de HA. Une IA n’a qu’à produire ce JSON pour générer le rendu.","cb.img": "À enregistrer dans config/www/floorplan/home.png (servi via /local/floorplan/home.png). Si le navigateur bloque le téléchargement, faites un clic droit sur l’image.","pngTitle": "Rendu PNG","pngDesc": "Si le navigateur bloque le téléchargement (courant en aperçu), faites un clic droit sur l’image pour l’enregistrer.","renderFail": "Échec du rendu","t.added": "« {n} » ajoutée avec ses appareils par défaut","t.addedPlain": "« {n} » ajoutée","t.pickRoom": "Sélectionnez d’abord une pièce","t.addedEnt": "{id} ajouté","t.floorOrder": "Ordre des étages mis à jour","t.floorAdded": "« {n} » ajouté avec un salon et une chambre","t.floorDel": "« {n} » supprimé","t.keepOne": "Gardez au moins un étage","t.sample": "Exemple chargé","t.copied": "Copié","t.selectCopy": "Sélectionné — appuyez sur Ctrl/Cmd+C","t.needRooms": "Ajoutez d’abord quelques pièces","n.day|open|off": "Lumière naturelle seule. La fenêtre projette une tache froide et nette au sol ; les faces à l’ombre remontent par rebond. Ouvert, homogène, contraste moyen.","n.day|open|on": "Jour + lampes. Deux sources se cumulent : le plus lumineux mais le plus inutile, les lampes n’agissant que là où le jour n’arrive pas — d’où le liseré chaud autour de la tache.","n.day|closed|off": "Rideaux tirés, sans lampe. Seule subsiste la diffusion à travers le tissu. L’image vire au gris et perd toute direction ; les ombres disparaissent presque.","n.day|closed|on": "Rideaux tirés, lampes allumées. La lampe devient l’unique source principale : flaque chaude complète au sol et dégradé net du haut vers le bas sur les murs.","n.night|open|off": "Nuit, sans lampe, rideaux ouverts. Juste un reste de lune ou d’éclairage public. On ne lit plus que des silhouettes et la fenêtre est le point le plus clair.","n.night|open|on": "Nuit, lampes allumées, rideaux ouverts. Intérieur chaud contre bleu froid ; la fenêtre devient un trou noir et la flaque chaude chute vite. L’état le plus spectaculaire.","n.night|closed|off": "Nuit, lampes éteintes, rideaux tirés. La référence noire, tout juste assez de séparation pour lire les contours — l’état « personne à la maison ».","n.night|closed|on": "Nuit, lampes allumées, rideaux tirés. La lumière chaude rebondit sur le tissu, décroît le plus lentement et enveloppe la pièce. L’image par défaut du « chez-soi ».","nameJoin": " "},"de": {"lang": "Sprache","day": "Tag","night": "Nacht","allOn": "Alles einschalten","allOff": "Alles ausschalten","sample": "Beispiel laden","exportPng": "PNG exportieren","exportHa": "Nach Home Assistant exportieren","roomBlocks": "Raumblöcke","devices": "Geräte","noRoomSel": "Kein Raum ausgewählt","dev.ceiling_light": "Smarte Deckenleuchte","dev.dimmer": "Dimmschalter","dev.smart_switch": "Smarter Schalter","dev.curtain": "Smarter Vorhang","dev.roller": "Rollo","h.ceiling_light": "light · brightness + color_temp","h.dimmer": "light · brightness · dimmt Leuchten","h.smart_switch": "switch · ein/aus · schaltet Leuchten","h.curtain": "cover · curtain · position","h.roller": "cover · shade · position","room.living": "Wohnzimmer","room.dining": "Esszimmer","room.kitchen": "Küche","room.master": "Schlafzimmer","room.bedroom": "Gästezimmer","room.kids": "Kinderzimmer","room.study": "Arbeitszimmer","room.bath": "Badezimmer","room.balcony": "Balkon","room.entry": "Diele","room.hall": "Flur","center": "Einpassen","pins": "Entitäts-Marker","roomNames": "Raumnamen","isoGrid": "Iso-Raster","delSel": "Auswahl löschen","hud": "Raumblöcke hereinziehen · Abstand automatisch · Raum anklicken zum Auswählen · Leuchte oder Schalter anklicken zum Umschalten · Taste D für Tag/Nacht","floors": "Etagen","addFloor": "+ Etage hinzufügen","delFloor": "Etage löschen","emptyFloor": "leer","moveUp": "Nach oben","moveDown": "Nach unten","floorMeta": "{r} Räume · {e} Entitäten","floorName": "Etage {n}","matrix": "Lichtmatrix","now": "Aktuell","global": "Global","gBri": "Helligkeit","gCov": "Vorhangposition","roomsEntities": "Räume & Entitäten","countFmt": "{r} Räume / {e} Entitäten","noSelHint": "Kein Raum ausgewählt — es werden alle Entitäten dieser Etage gezeigt.","noEnt": "Keine Entitäten","delRoom": "Raum löschen","bri": "Helligkeit","pos": "Position","roomLabel": "{n} Entitäten · {m} an","noRooms": "Auf dieser Etage gibt es noch keine Räume. Ziehen Sie links einen Raumblock herein.","mx.day": "Tag","mx.night": "Nacht","mx.open": "Offen","mx.closed": "Zu","mx.on": "Licht an","mx.off": "Licht aus","haTitle": "Nach Home Assistant exportieren","haDesc": "Zwei praktikable Wege: picture-elements ist eine native HA-Karte und läuft sofort; ha-floorplan braucht HACS, nimmt aber dieses SVG als Hintergrund und bindet über entity_id.","tab.img": "Hintergrundbild","close": "Schließen","copyTab": "Diesen Tab kopieren","cb.pe": "Native Karte, nichts zu installieren. Speichern Sie das PNG zuerst unter config/www/floorplan/home.png.","cb.fp": "Für die ha-floorplan-Karte (über HACS). Im exportierten SVG ist die id jedes Markers seine entity_id.","cb.css": "Status-Stylesheet für ha-floorplan. Ablegen unter config/www/floorplan/home.css.","cb.json": "Agentenfreundliche Szenenbeschreibung, isomorph zum floor / area / entity-Register von HA. Eine KI muss nur dieses JSON ausgeben, um das Rendering zu erzeugen.","cb.img": "Unter config/www/floorplan/home.png speichern (ausgeliefert als /local/floorplan/home.png). Blockiert der Browser den Download, Bild per Rechtsklick sichern.","pngTitle": "Szenen-PNG","pngDesc": "Blockiert der Browser den Download (in Vorschauen üblich), das Bild per Rechtsklick speichern.","renderFail": "Rendern fehlgeschlagen","t.added": "„{n}“ mit Standardgeräten hinzugefügt","t.addedPlain": "„{n}“ hinzugefügt","t.pickRoom": "Zuerst einen Raum auswählen","t.addedEnt": "{id} hinzugefügt","t.floorOrder": "Etagenreihenfolge aktualisiert","t.floorAdded": "„{n}“ mit Wohn- und Schlafzimmer angelegt","t.floorDel": "„{n}“ gelöscht","t.keepOne": "Mindestens eine Etage behalten","t.sample": "Beispiel geladen","t.copied": "Kopiert","t.selectCopy": "Markiert — Strg/Cmd+C drücken","t.needRooms": "Zuerst ein paar Räume anlegen","n.day|open|off": "Nur Tageslicht. Das Fenster wirft einen klaren kühlen Fleck auf den Boden, abgewandte Flächen hellen über Reflexionen auf — offen, gleichmäßig, mittlerer Kontrast.","n.day|open|on": "Tageslicht plus Lampen. Zwei Quellen addieren sich: am hellsten und zugleich am verschwenderischsten, denn die Lampen wirken nur dort, wo das Tageslicht nicht hinkommt — sichtbar am warmen Saum um den Lichtfleck.","n.day|closed|off": "Vorhänge zu, keine Lampen. Nur das durchs Gewebe gestreute Licht bleibt. Das Bild wird grau und richtungslos, Möbelschatten verschwinden fast völlig.","n.day|closed|on": "Vorhänge zu, Lampen an. Die Lampe ist jetzt das einzige Führungslicht: eine volle warme Lichtpfütze am Boden und ein klarer Verlauf von oben nach unten an den Wänden.","n.night|open|off": "Nacht, Lampen aus, Vorhänge offen. Nur ein Rest Mond- oder Straßenlicht. Formen lesen sich allein als Silhouette, das Fenster ist die hellste Stelle im Bild.","n.night|open|on": "Nacht, Lampen an, Vorhänge offen. Warmes Interieur gegen kaltes Blau; das Fenster wird zum schwarzen Loch, die warme Pfütze fällt steil ab. Der dramatischste Zustand.","n.night|closed|off": "Nacht, Lampen aus, Vorhänge zu. Die schwarze Referenz — gerade genug Trennung, um Umrisse zu erkennen. Der Zustand „niemand zu Hause“.","n.night|closed|on": "Nacht, Lampen an, Vorhänge zu. Warmes Licht wird vom Stoff zurückgeworfen, fällt am langsamsten ab und umhüllt den Raum. Das Standardbild von „Zuhause“.","nameJoin": " "},"it": {"lang": "Lingua","day": "Giorno","night": "Notte","allOn": "Accendi tutto","allOff": "Spegni tutto","sample": "Carica esempio","exportPng": "Esporta PNG","exportHa": "Esporta in Home Assistant","roomBlocks": "Blocchi stanza","devices": "Dispositivi","noRoomSel": "Nessuna stanza selezionata","dev.ceiling_light": "Plafoniera smart","dev.dimmer": "Dimmer","dev.smart_switch": "Interruttore smart","dev.curtain": "Tenda motorizzata","dev.roller": "Tapparella","h.ceiling_light": "light · brightness + color_temp","h.dimmer": "light · brightness · regola le luci","h.smart_switch": "switch · on/off · comanda le luci","h.curtain": "cover · curtain · position","h.roller": "cover · shade · position","room.living": "Soggiorno","room.dining": "Sala da pranzo","room.kitchen": "Cucina","room.master": "Camera matrimoniale","room.bedroom": "Camera","room.kids": "Cameretta","room.study": "Studio","room.bath": "Bagno","room.balcony": "Balcone","room.entry": "Ingresso","room.hall": "Corridoio","center": "Adatta","pins": "Marcatori entità","roomNames": "Nomi stanze","isoGrid": "Griglia iso","delSel": "Elimina selezione","hud": "Trascina i blocchi · spaziatura automatica · clicca una stanza per selezionarla · clicca una lampada o un interruttore per commutarlo · premi D per giorno/notte","floors": "Piani","addFloor": "+ Aggiungi piano","delFloor": "Elimina piano","emptyFloor": "vuoto","moveUp": "Sposta su","moveDown": "Sposta giù","floorMeta": "{r} stanze · {e} entità","floorName": "Piano {n}","matrix": "Matrice luci","now": "Attuale","global": "Globale","gBri": "Luminosità","gCov": "Posizione tende","roomsEntities": "Stanze ed entità","countFmt": "{r} stanze / {e} entità","noSelHint": "Nessuna stanza selezionata: sono mostrate tutte le entità del piano.","noEnt": "Nessuna entità","delRoom": "Elimina stanza","bri": "Luminosità","pos": "Posizione","roomLabel": "{n} entità · {m} accese","noRooms": "Nessuna stanza su questo piano. Trascina un blocco dalla colonna di sinistra.","mx.day": "Giorno","mx.night": "Notte","mx.open": "Aperte","mx.closed": "Chiuse","mx.on": "Luci accese","mx.off": "Luci spente","haTitle": "Esporta in Home Assistant","haDesc": "Due strade davvero praticabili: picture-elements è una scheda nativa di HA e funziona subito; ha-floorplan richiede HACS ma usa questo SVG come sfondo e collega tramite entity_id.","tab.img": "Immagine di sfondo","close": "Chiudi","copyTab": "Copia questa scheda","cb.pe": "Scheda nativa, niente da installare. Salva prima il PNG in config/www/floorplan/home.png.","cb.fp": "Per la scheda ha-floorplan (installala da HACS). Nell’SVG esportato l’id di ogni marcatore è il suo entity_id.","cb.css": "Foglio di stile degli stati per ha-floorplan. Va in config/www/floorplan/home.css.","cb.json": "Descrizione della scena pensata per gli agenti, isomorfa al registro floor / area / entity di HA. A un’IA basta emettere questo JSON per generare il render.","cb.img": "Salvalo in config/www/floorplan/home.png (servito da /local/floorplan/home.png). Se il browser blocca il download, salva l’immagine col tasto destro.","pngTitle": "PNG della scena","pngDesc": "Se il browser blocca il download (accade spesso nelle anteprime), salva l’immagine col tasto destro.","renderFail": "Rendering non riuscito","t.added": "«{n}» aggiunta con i dispositivi predefiniti","t.addedPlain": "«{n}» aggiunta","t.pickRoom": "Seleziona prima una stanza","t.addedEnt": "{id} aggiunto","t.floorOrder": "Ordine dei piani aggiornato","t.floorAdded": "«{n}» aggiunto con soggiorno e camera","t.floorDel": "«{n}» eliminato","t.keepOne": "Mantieni almeno un piano","t.sample": "Esempio caricato","t.copied": "Copiato","t.selectCopy": "Selezionato: premi Ctrl/Cmd+C","t.needRooms": "Aggiungi prima qualche stanza","n.day|open|off": "Solo luce naturale. La finestra proietta una macchia fredda e netta sul pavimento e le facce in ombra si alzano per rimbalzo: aperto, uniforme, contrasto medio.","n.day|open|on": "Luce naturale più lampade. Due sorgenti si sommano: il più luminoso e insieme il più sprecato, perché le lampade agiscono solo dove il giorno non arriva — da qui il bordo caldo attorno alla macchia.","n.day|closed|off": "Tende chiuse, nessuna lampada. Resta solo la diffusione attraverso il tessuto. L’immagine ingrigisce e perde direzione; le ombre dei mobili quasi spariscono.","n.day|closed|on": "Tende chiuse, lampade accese. La lampada diventa l’unica luce principale: pozza calda piena sul pavimento e gradiente netto dall’alto in basso sulle pareti.","n.night|open|off": "Notte, lampade spente, tende aperte. Solo una traccia di luna o di lampione. Le forme si leggono per sagoma e la finestra è il punto più chiaro.","n.night|open|on": "Notte, lampade accese, tende aperte. Interno caldo contro il blu freddo; la finestra diventa un buco nero e la pozza calda decade rapidamente. Lo stato più drammatico.","n.night|closed|off": "Notte, lampade spente, tende chiuse. Il riferimento nero, con appena la separazione necessaria a leggere i contorni: lo stato «nessuno in casa».","n.night|closed|on": "Notte, lampade accese, tende chiuse. La luce calda rimbalza sul tessuto, decade più lentamente e avvolge la stanza. L’immagine predefinita di «casa».","nameJoin": " "},"es": {"lang": "Idioma","day": "Día","night": "Noche","allOn": "Encender todo","allOff": "Apagar todo","sample": "Cargar ejemplo","exportPng": "Exportar PNG","exportHa": "Exportar a Home Assistant","roomBlocks": "Bloques de estancia","devices": "Dispositivos","noRoomSel": "Ninguna estancia seleccionada","dev.ceiling_light": "Plafón inteligente","dev.dimmer": "Regulador","dev.smart_switch": "Interruptor inteligente","dev.curtain": "Cortina motorizada","dev.roller": "Estor enrollable","h.ceiling_light": "light · brightness + color_temp","h.dimmer": "light · brightness · regula las luces","h.smart_switch": "switch · on/off · controla las luces","h.curtain": "cover · curtain · position","h.roller": "cover · shade · position","room.living": "Salón","room.dining": "Comedor","room.kitchen": "Cocina","room.master": "Dormitorio principal","room.bedroom": "Dormitorio","room.kids": "Habitación infantil","room.study": "Despacho","room.bath": "Baño","room.balcony": "Balcón","room.entry": "Recibidor","room.hall": "Pasillo","center": "Ajustar","pins": "Marcas de entidad","roomNames": "Nombres","isoGrid": "Rejilla iso","delSel": "Eliminar selección","hud": "Arrastra bloques al lienzo · separación automática · clic en una estancia para seleccionarla · clic en una lámpara o interruptor para conmutarlo · pulsa D para día/noche","floors": "Plantas","addFloor": "+ Añadir planta","delFloor": "Eliminar planta","emptyFloor": "vacía","moveUp": "Subir","moveDown": "Bajar","floorMeta": "{r} estancias · {e} entidades","floorName": "Planta {n}","matrix": "Matriz de luz","now": "Actual","global": "Global","gBri": "Brillo","gCov": "Posición de cortinas","roomsEntities": "Estancias y entidades","countFmt": "{r} estancias / {e} entidades","noSelHint": "Ninguna estancia seleccionada: se muestran todas las entidades de la planta.","noEnt": "Sin entidades","delRoom": "Eliminar estancia","bri": "Brillo","pos": "Posición","roomLabel": "{n} entidades · {m} encendidas","noRooms": "Aún no hay estancias en esta planta. Arrastra un bloque desde la columna izquierda.","mx.day": "Día","mx.night": "Noche","mx.open": "Abiertas","mx.closed": "Cerradas","mx.on": "Luz encendida","mx.off": "Luz apagada","haTitle": "Exportar a Home Assistant","haDesc": "Dos vías que funcionan de verdad: picture-elements es una tarjeta nativa de HA y sirve tal cual; ha-floorplan necesita HACS, pero toma este SVG como fondo y enlaza por entity_id.","tab.img": "Imagen de fondo","close": "Cerrar","copyTab": "Copiar esta pestaña","cb.pe": "Tarjeta nativa, nada que instalar. Guarda primero el PNG en config/www/floorplan/home.png.","cb.fp": "Para la tarjeta ha-floorplan (instálala desde HACS). En el SVG exportado el id de cada marca es su entity_id.","cb.css": "Hoja de estilos de estado para ha-floorplan. Colócala en config/www/floorplan/home.css.","cb.json": "Descripción de escena pensada para agentes, isomorfa al registro floor / area / entity de HA. A una IA le basta emitir este JSON para generar el render.","cb.img": "Guárdalo en config/www/floorplan/home.png (servido en /local/floorplan/home.png). Si el navegador bloquea la descarga, guarda la imagen con el botón derecho.","pngTitle": "PNG de la escena","pngDesc": "Si el navegador bloquea la descarga (habitual en vistas previas), guarda la imagen con el botón derecho.","renderFail": "Fallo al renderizar","t.added": "«{n}» añadida con sus dispositivos por defecto","t.addedPlain": "«{n}» añadida","t.pickRoom": "Selecciona antes una estancia","t.addedEnt": "{id} añadido","t.floorOrder": "Orden de plantas actualizado","t.floorAdded": "«{n}» añadida con salón y dormitorio","t.floorDel": "«{n}» eliminada","t.keepOne": "Conserva al menos una planta","t.sample": "Ejemplo cargado","t.copied": "Copiado","t.selectCopy": "Seleccionado: pulsa Ctrl/Cmd+C","t.needRooms": "Añade primero algunas estancias","n.day|open|off": "Solo luz natural. La ventana proyecta una mancha fría y nítida en el suelo y las caras en sombra suben por rebote: abierto, uniforme, contraste medio.","n.day|open|on": "Luz natural más lámparas. Dos fuentes se suman: lo más luminoso y a la vez lo más inútil, porque las lámparas solo llegan donde no llega el día — de ahí el ribete cálido alrededor de la mancha.","n.day|closed|off": "Cortinas corridas, sin lámparas. Solo queda la difusión a través de la tela. La imagen se agrisa y pierde dirección; las sombras del mobiliario casi desaparecen.","n.day|closed|on": "Cortinas corridas, lámparas encendidas. La lámpara pasa a ser la única luz principal: charco cálido completo en el suelo y degradado claro de arriba abajo en las paredes.","n.night|open|off": "Noche, sin lámparas, cortinas abiertas. Solo un resto de luna o de farola. Las formas se leen por silueta y la ventana es lo más claro del encuadre.","n.night|open|on": "Noche, lámparas encendidas, cortinas abiertas. Interior cálido contra azul frío; la ventana se vuelve un agujero negro y el charco cálido cae con fuerza. El estado más dramático.","n.night|closed|off": "Noche, lámparas apagadas, cortinas corridas. La referencia negra, con apenas separación para leer contornos: el estado «nadie en casa».","n.night|closed|on": "Noche, lámparas encendidas, cortinas corridas. La luz cálida rebota en la tela, cae más despacio y envuelve la estancia. La imagen por defecto de «hogar».","nameJoin": " "},"pt": {"lang": "Idioma","day": "Dia","night": "Noite","allOn": "Ligar tudo","allOff": "Desligar tudo","sample": "Carregar exemplo","exportPng": "Exportar PNG","exportHa": "Exportar para o Home Assistant","roomBlocks": "Blocos de divisão","devices": "Dispositivos","noRoomSel": "Nenhuma divisão selecionada","dev.ceiling_light": "Plafon inteligente","dev.dimmer": "Regulador","dev.smart_switch": "Interruptor inteligente","dev.curtain": "Cortina motorizada","dev.roller": "Estore de rolo","h.ceiling_light": "light · brightness + color_temp","h.dimmer": "light · brightness · regula as luzes","h.smart_switch": "switch · on/off · comanda as luzes","h.curtain": "cover · curtain · position","h.roller": "cover · shade · position","room.living": "Sala de estar","room.dining": "Sala de jantar","room.kitchen": "Cozinha","room.master": "Suíte principal","room.bedroom": "Quarto","room.kids": "Quarto das crianças","room.study": "Escritório","room.bath": "Casa de banho","room.balcony": "Varanda","room.entry": "Hall de entrada","room.hall": "Corredor","center": "Ajustar","pins": "Marcas de entidade","roomNames": "Nomes","isoGrid": "Grelha iso","delSel": "Eliminar seleção","hud": "Arraste blocos para a tela · espaçamento automático · clique numa divisão para a selecionar · clique numa lâmpada ou interruptor para comutar · prima D para dia/noite","floors": "Pisos","addFloor": "+ Adicionar piso","delFloor": "Eliminar piso","emptyFloor": "vazio","moveUp": "Subir","moveDown": "Descer","floorMeta": "{r} divisões · {e} entidades","floorName": "Piso {n}","matrix": "Matriz de luz","now": "Atual","global": "Global","gBri": "Brilho","gCov": "Posição das cortinas","roomsEntities": "Divisões e entidades","countFmt": "{r} divisões / {e} entidades","noSelHint": "Nenhuma divisão selecionada — mostram-se todas as entidades do piso.","noEnt": "Sem entidades","delRoom": "Eliminar divisão","bri": "Brilho","pos": "Posição","roomLabel": "{n} entidades · {m} ligadas","noRooms": "Ainda não há divisões neste piso. Arraste um bloco da coluna esquerda.","mx.day": "Dia","mx.night": "Noite","mx.open": "Abertas","mx.closed": "Fechadas","mx.on": "Luz ligada","mx.off": "Luz desligada","haTitle": "Exportar para o Home Assistant","haDesc": "Dois caminhos que resultam mesmo: picture-elements é um cartão nativo do HA e funciona logo; ha-floorplan exige HACS, mas usa este SVG como fundo e liga por entity_id.","tab.img": "Imagem de fundo","close": "Fechar","copyTab": "Copiar este separador","cb.pe": "Cartão nativo, nada a instalar. Guarde primeiro o PNG em config/www/floorplan/home.png.","cb.fp": "Para o cartão ha-floorplan (instale via HACS). No SVG exportado o id de cada marca é o seu entity_id.","cb.css": "Folha de estilos de estado para o ha-floorplan. Coloque em config/www/floorplan/home.css.","cb.json": "Descrição de cena pensada para agentes, isomorfa ao registo floor / area / entity do HA. A uma IA basta produzir este JSON para gerar a imagem.","cb.img": "Guarde em config/www/floorplan/home.png (servido em /local/floorplan/home.png). Se o navegador bloquear a transferência, guarde a imagem com o botão direito.","pngTitle": "PNG da cena","pngDesc": "Se o navegador bloquear a transferência (comum em pré-visualizações), guarde a imagem com o botão direito.","renderFail": "Falha ao renderizar","t.added": "«{n}» adicionada com os dispositivos por omissão","t.addedPlain": "«{n}» adicionada","t.pickRoom": "Selecione primeiro uma divisão","t.addedEnt": "{id} adicionado","t.floorOrder": "Ordem dos pisos atualizada","t.floorAdded": "«{n}» adicionado com sala e quarto","t.floorDel": "«{n}» eliminado","t.keepOne": "Mantenha pelo menos um piso","t.sample": "Exemplo carregado","t.copied": "Copiado","t.selectCopy": "Selecionado — prima Ctrl/Cmd+C","t.needRooms": "Adicione primeiro algumas divisões","n.day|open|off": "Só luz natural. A janela lança uma mancha fria e nítida no chão e as faces em sombra sobem por reflexão: aberto, uniforme, contraste médio.","n.day|open|on": "Luz natural mais lâmpadas. Duas fontes somam-se: o mais claro e ao mesmo tempo o mais desperdiçado, pois as lâmpadas só chegam onde o dia não chega — daí o rebordo quente à volta da mancha.","n.day|closed|off": "Cortinas corridas, sem lâmpadas. Resta apenas a difusão através do tecido. A imagem acinzenta e perde direção; as sombras dos móveis quase desaparecem.","n.day|closed|on": "Cortinas corridas, lâmpadas ligadas. A lâmpada passa a ser a única luz principal: poça quente completa no chão e gradiente claro de cima para baixo nas paredes.","n.night|open|off": "Noite, lâmpadas desligadas, cortinas abertas. Apenas um resto de luar ou de candeeiro de rua. As formas leem-se por silhueta e a janela é o ponto mais claro.","n.night|open|on": "Noite, lâmpadas ligadas, cortinas abertas. Interior quente contra o azul frio; a janela torna-se um buraco negro e a poça quente cai depressa. O estado mais dramático.","n.night|closed|off": "Noite, lâmpadas desligadas, cortinas corridas. A referência preta, com separação apenas suficiente para ler contornos: o estado «ninguém em casa».","n.night|closed|on": "Noite, lâmpadas ligadas, cortinas corridas. A luz quente reflete no tecido, cai mais devagar e envolve a divisão. A imagem por omissão de «casa».","nameJoin": " "},"nl": {"lang": "Taal","day": "Dag","night": "Nacht","allOn": "Alles aan","allOff": "Alles uit","sample": "Voorbeeld laden","exportPng": "PNG exporteren","exportHa": "Exporteren naar Home Assistant","roomBlocks": "Kamerblokken","devices": "Apparaten","noRoomSel": "Geen kamer geselecteerd","dev.ceiling_light": "Slimme plafondlamp","dev.dimmer": "Dimmer","dev.smart_switch": "Slimme schakelaar","dev.curtain": "Slim gordijn","dev.roller": "Rolgordijn","h.ceiling_light": "light · brightness + color_temp","h.dimmer": "light · brightness · dimt lampen","h.smart_switch": "switch · aan/uit · schakelt lampen","h.curtain": "cover · curtain · position","h.roller": "cover · shade · position","room.living": "Woonkamer","room.dining": "Eetkamer","room.kitchen": "Keuken","room.master": "Hoofdslaapkamer","room.bedroom": "Slaapkamer","room.kids": "Kinderkamer","room.study": "Werkkamer","room.bath": "Badkamer","room.balcony": "Balkon","room.entry": "Hal","room.hall": "Gang","center": "Passend","pins": "Entiteitsmarkers","roomNames": "Kamernamen","isoGrid": "Iso-raster","delSel": "Selectie verwijderen","hud": "Sleep kamerblokken erin · automatische tussenruimte · klik een kamer om te selecteren · klik een lamp of schakelaar om te schakelen · druk op D voor dag/nacht","floors": "Verdiepingen","addFloor": "+ Verdieping toevoegen","delFloor": "Verdieping verwijderen","emptyFloor": "leeg","moveUp": "Omhoog","moveDown": "Omlaag","floorMeta": "{r} kamers · {e} entiteiten","floorName": "Verdieping {n}","matrix": "Lichtmatrix","now": "Nu","global": "Globaal","gBri": "Helderheid","gCov": "Gordijnstand","roomsEntities": "Kamers en entiteiten","countFmt": "{r} kamers / {e} entiteiten","noSelHint": "Geen kamer geselecteerd — alle entiteiten op deze verdieping worden getoond.","noEnt": "Geen entiteiten","delRoom": "Kamer verwijderen","bri": "Helderheid","pos": "Stand","roomLabel": "{n} entiteiten · {m} aan","noRooms": "Nog geen kamers op deze verdieping. Sleep links een kamerblok naar binnen.","mx.day": "Dag","mx.night": "Nacht","mx.open": "Open","mx.closed": "Dicht","mx.on": "Licht aan","mx.off": "Licht uit","haTitle": "Exporteren naar Home Assistant","haDesc": "Twee routes die echt werken: picture-elements is een native HA-kaart en draait meteen; ha-floorplan vereist HACS, maar gebruikt deze SVG als achtergrond en koppelt op entity_id.","tab.img": "Achtergrond","close": "Sluiten","copyTab": "Dit tabblad kopiëren","cb.pe": "Native kaart, niets te installeren. Zet de PNG eerst in config/www/floorplan/home.png.","cb.fp": "Voor de ha-floorplan-kaart (installeer via HACS). In de geëxporteerde SVG is de id van elke marker zijn entity_id.","cb.css": "Statusstylesheet voor ha-floorplan. Plaats hem in config/www/floorplan/home.css.","cb.json": "Agentvriendelijke scènebeschrijving, isomorf met het floor / area / entity-register van HA. Een AI hoeft alleen deze JSON te produceren om de render te maken.","cb.img": "Opslaan als config/www/floorplan/home.png (bereikbaar via /local/floorplan/home.png). Blokkeert de browser het downloaden, sla de afbeelding dan op met rechtermuisknop.","pngTitle": "Scène-PNG","pngDesc": "Blokkeert de browser het downloaden (gebruikelijk in previews), sla de afbeelding dan op met de rechtermuisknop.","renderFail": "Renderen mislukt","t.added": "“{n}” toegevoegd met standaardapparaten","t.addedPlain": "“{n}” toegevoegd","t.pickRoom": "Selecteer eerst een kamer","t.addedEnt": "{id} toegevoegd","t.floorOrder": "Volgorde van verdiepingen bijgewerkt","t.floorAdded": "“{n}” toegevoegd met woonkamer en slaapkamer","t.floorDel": "“{n}” verwijderd","t.keepOne": "Houd minstens één verdieping","t.sample": "Voorbeeld geladen","t.copied": "Gekopieerd","t.selectCopy": "Geselecteerd — druk op Ctrl/Cmd+C","t.needRooms": "Voeg eerst een paar kamers toe","n.day|open|off": "Alleen daglicht. Het raam werpt een scherpe koele vlek op de vloer en schaduwvlakken lichten op door weerkaatsing: open, gelijkmatig, gemiddeld contrast.","n.day|open|on": "Daglicht plus lampen. Twee bronnen stapelen: het helderst en tegelijk het meest verspild, want de lampen bereiken alleen wat het daglicht niet raakt — vandaar de warme rand rond de lichtvlek.","n.day|closed|off": "Gordijnen dicht, geen lampen. Alleen de diffusie door de stof blijft over. Het beeld vergrijst en verliest richting; meubelschaduwen verdwijnen bijna.","n.day|closed|on": "Gordijnen dicht, lampen aan. De lamp is nu het enige hoofdlicht: een volle warme plas op de vloer en een duidelijk verloop van boven naar beneden op de muren.","n.night|open|off": "Nacht, lampen uit, gordijnen open. Slechts een restje maan- of straatlicht. Vormen lees je alleen als silhouet en het raam is het lichtste in beeld.","n.night|open|on": "Nacht, lampen aan, gordijnen open. Warm interieur tegen koud blauw; het raam wordt een zwart gat en de warme plas valt scherp af. De meest dramatische stand.","n.night|closed|off": "Nacht, lampen uit, gordijnen dicht. De zwarte referentie, net genoeg scheiding om contouren te lezen — de stand “niemand thuis”.","n.night|closed|on": "Nacht, lampen aan, gordijnen dicht. Warm licht kaatst terug van de stof, valt het traagst af en omhult de kamer. Het standaardbeeld van “thuis”.","nameJoin": " "},"pl": {"lang": "Język","day": "Dzień","night": "Noc","allOn": "Włącz wszystko","allOff": "Wyłącz wszystko","sample": "Wczytaj przykład","exportPng": "Eksportuj PNG","exportHa": "Eksportuj do Home Assistant","roomBlocks": "Bloki pomieszczeń","devices": "Urządzenia","noRoomSel": "Nie wybrano pomieszczenia","dev.ceiling_light": "Inteligentny plafon","dev.dimmer": "Ściemniacz","dev.smart_switch": "Inteligentny włącznik","dev.curtain": "Inteligentna zasłona","dev.roller": "Roleta","h.ceiling_light": "light · brightness + color_temp","h.dimmer": "light · brightness · ściemnia lampy","h.smart_switch": "switch · wł./wył. · steruje lampami","h.curtain": "cover · curtain · position","h.roller": "cover · shade · position","room.living": "Salon","room.dining": "Jadalnia","room.kitchen": "Kuchnia","room.master": "Sypialnia główna","room.bedroom": "Sypialnia","room.kids": "Pokój dziecięcy","room.study": "Gabinet","room.bath": "Łazienka","room.balcony": "Balkon","room.entry": "Przedpokój","room.hall": "Korytarz","center": "Dopasuj","pins": "Znaczniki encji","roomNames": "Nazwy pomieszczeń","isoGrid": "Siatka izo","delSel": "Usuń zaznaczone","hud": "Przeciągnij bloki na scenę · automatyczne odstępy · kliknij pomieszczenie, aby je wybrać · kliknij lampę lub włącznik, aby przełączyć · naciśnij D, by zmienić porę doby","floors": "Piętra","addFloor": "+ Dodaj piętro","delFloor": "Usuń piętro","emptyFloor": "puste","moveUp": "W górę","moveDown": "W dół","floorMeta": "{r} pomieszczeń · {e} encji","floorName": "Piętro {n}","matrix": "Matryca światła","now": "Teraz","global": "Globalnie","gBri": "Jasność","gCov": "Pozycja zasłon","roomsEntities": "Pomieszczenia i encje","countFmt": "{r} pomieszczeń / {e} encji","noSelHint": "Nie wybrano pomieszczenia — pokazano wszystkie encje tego piętra.","noEnt": "Brak encji","delRoom": "Usuń pomieszczenie","bri": "Jasność","pos": "Pozycja","roomLabel": "{n} encji · {m} włączonych","noRooms": "Na tym piętrze nie ma jeszcze pomieszczeń. Przeciągnij blok z lewej kolumny.","mx.day": "Dzień","mx.night": "Noc","mx.open": "Otwarte","mx.closed": "Zamknięte","mx.on": "Światło wł.","mx.off": "Światło wył.","haTitle": "Eksport do Home Assistant","haDesc": "Dwie realne ścieżki: picture-elements to natywna karta HA, działa od razu; ha-floorplan wymaga HACS, ale przyjmuje ten SVG jako tło i wiąże po entity_id.","tab.img": "Tło","close": "Zamknij","copyTab": "Kopiuj tę zakładkę","cb.pe": "Karta natywna, nic nie trzeba instalować. Najpierw zapisz PNG w config/www/floorplan/home.png.","cb.fp": "Dla karty ha-floorplan (instalacja przez HACS). W wyeksportowanym SVG id każdego znacznika to jego entity_id.","cb.css": "Arkusz stanów dla ha-floorplan. Umieść go w config/www/floorplan/home.css.","cb.json": "Opis sceny przyjazny agentom, izomorficzny z rejestrem floor / area / entity w HA. AI wystarczy wygenerować ten JSON, by powstał render.","cb.img": "Zapisz w config/www/floorplan/home.png (serwowane jako /local/floorplan/home.png). Jeśli przeglądarka blokuje pobieranie, zapisz obraz prawym przyciskiem.","pngTitle": "PNG sceny","pngDesc": "Jeśli przeglądarka blokuje pobieranie (częste w podglądach), zapisz obraz prawym przyciskiem myszy.","renderFail": "Renderowanie nie powiodło się","t.added": "Dodano „{n}” wraz z domyślnymi urządzeniami","t.addedPlain": "Dodano „{n}”","t.pickRoom": "Najpierw wybierz pomieszczenie","t.addedEnt": "Dodano {id}","t.floorOrder": "Zaktualizowano kolejność pięter","t.floorAdded": "Dodano „{n}” z salonem i sypialnią","t.floorDel": "Usunięto „{n}”","t.keepOne": "Zachowaj co najmniej jedno piętro","t.sample": "Wczytano przykład","t.copied": "Skopiowano","t.selectCopy": "Zaznaczono — naciśnij Ctrl/Cmd+C","t.needRooms": "Najpierw dodaj kilka pomieszczeń","n.day|open|off": "Samo światło dzienne. Okno rzuca na podłogę wyraźną chłodną plamę, a ściany w cieniu rozjaśnia światło odbite: otwarcie, równomiernie, średni kontrast.","n.day|open|on": "Dzień plus lampy. Dwa źródła się sumują: najjaśniej, a zarazem najbardziej marnotrawnie, bo lampy działają tylko tam, gdzie nie sięga dzień — stąd ciepła obwódka wokół plamy.","n.day|closed|off": "Zasłony zaciągnięte, lampy wyłączone. Zostaje tylko światło rozproszone przez tkaninę. Obraz szarzeje i traci kierunek, cienie mebli niemal znikają.","n.day|closed|on": "Zasłony zaciągnięte, lampy włączone. Lampa staje się jedynym światłem głównym: pełna ciepła kałuża na podłodze i wyraźny gradient od góry do dołu na ścianach.","n.night|open|off": "Noc, lampy wyłączone, zasłony otwarte. Tylko ślad księżyca albo latarni. Kształty czyta się wyłącznie z sylwetki, a okno jest najjaśniejszym punktem kadru.","n.night|open|on": "Noc, lampy włączone, zasłony otwarte. Ciepłe wnętrze kontra zimny błękit; okno staje się czarną dziurą, a ciepła kałuża gwałtownie opada. Najbardziej dramatyczny stan.","n.night|closed|off": "Noc, lampy wyłączone, zasłony zaciągnięte. Czarny punkt odniesienia, ledwie tyle rozdzielenia, by odczytać kontury — stan „nikogo nie ma w domu”.","n.night|closed|on": "Noc, lampy włączone, zasłony zaciągnięte. Ciepłe światło odbija się od tkaniny, opada najwolniej i otula wnętrze. Domyślny obraz „domu”.","nameJoin": " "},"ru": {"lang": "Язык","day": "День","night": "Ночь","allOn": "Включить весь свет","allOff": "Выключить весь свет","sample": "Загрузить пример","exportPng": "Экспорт PNG","exportHa": "Экспорт в Home Assistant","roomBlocks": "Блоки комнат","devices": "Устройства","noRoomSel": "Комната не выбрана","dev.ceiling_light": "Умный потолочный светильник","dev.dimmer": "Диммер","dev.smart_switch": "Умный выключатель","dev.curtain": "Умная штора","dev.roller": "Рулонная штора","h.ceiling_light": "light · brightness + color_temp","h.dimmer": "light · brightness · диммирует свет","h.smart_switch": "switch · вкл/выкл · управляет светом","h.curtain": "cover · curtain · position","h.roller": "cover · shade · position","room.living": "Гостиная","room.dining": "Столовая","room.kitchen": "Кухня","room.master": "Спальня хозяев","room.bedroom": "Спальня","room.kids": "Детская","room.study": "Кабинет","room.bath": "Ванная","room.balcony": "Балкон","room.entry": "Прихожая","room.hall": "Коридор","center": "Вписать","pins": "Метки сущностей","roomNames": "Названия комнат","isoGrid": "Изосетка","delSel": "Удалить выбранное","hud": "Перетащите блоки на сцену · зазоры расставляются сами · клик по комнате — выбор · клик по светильнику или выключателю — переключение · клавиша D — день/ночь","floors": "Этажи","addFloor": "+ Добавить этаж","delFloor": "Удалить этаж","emptyFloor": "пусто","moveUp": "Вверх","moveDown": "Вниз","floorMeta": "{r} комнат · {e} сущностей","floorName": "Этаж {n}","matrix": "Матрица света","now": "Сейчас","global": "Глобально","gBri": "Яркость света","gCov": "Положение штор","roomsEntities": "Комнаты и сущности","countFmt": "{r} комнат / {e} сущностей","noSelHint": "Комната не выбрана — показаны все сущности этажа.","noEnt": "Нет сущностей","delRoom": "Удалить комнату","bri": "Яркость","pos": "Положение","roomLabel": "{n} сущностей · {m} включено","noRooms": "На этом этаже пока нет комнат. Перетащите блок из левой колонки.","mx.day": "День","mx.night": "Ночь","mx.open": "Шторы открыты","mx.closed": "Шторы закрыты","mx.on": "Свет вкл","mx.off": "Свет выкл","haTitle": "Экспорт в Home Assistant","haDesc": "Два по-настоящему рабочих пути: picture-elements — нативная карточка HA, работает сразу; ha-floorplan требует HACS, но берёт этот SVG как подложку и связывает по entity_id.","tab.img": "Фон","close": "Закрыть","copyTab": "Скопировать вкладку","cb.pe": "Нативная карточка, ставить ничего не нужно. Сначала сохраните PNG в config/www/floorplan/home.png.","cb.fp": "Для карточки ha-floorplan (ставится через HACS). В экспортированном SVG id каждой метки — это её entity_id.","cb.css": "Таблица стилей состояний для ha-floorplan. Положите её в config/www/floorplan/home.css.","cb.json": "Описание сцены для ИИ-агентов, изоморфное реестру floor / area / entity в HA. Агенту достаточно выдать этот JSON, чтобы получить картинку.","cb.img": "Сохраните в config/www/floorplan/home.png (отдаётся по /local/floorplan/home.png). Если браузер блокирует загрузку, сохраните изображение правой кнопкой.","pngTitle": "PNG сцены","pngDesc": "Если браузер блокирует загрузку (обычное дело в предпросмотре), сохраните изображение правой кнопкой.","renderFail": "Ошибка отрисовки","t.added": "Добавлена «{n}» с устройствами по умолчанию","t.addedPlain": "Добавлена «{n}»","t.pickRoom": "Сначала выберите комнату","t.addedEnt": "Добавлено {id}","t.floorOrder": "Порядок этажей обновлён","t.floorAdded": "Добавлен «{n}» с гостиной и спальней","t.floorDel": "Удалён «{n}»","t.keepOne": "Оставьте хотя бы один этаж","t.sample": "Пример загружен","t.copied": "Скопировано","t.selectCopy": "Выделено — нажмите Ctrl/Cmd+C","t.needRooms": "Сначала добавьте несколько комнат","n.day|open|off": "Только дневной свет. Окно кладёт на пол чёткое холодное пятно, теневые плоскости подсвечены отражённым светом: открыто, ровно, средний контраст.","n.day|open|on": "День плюс лампы. Два источника складываются: самое яркое и самое бесполезное состояние — лампы работают лишь там, куда не достаёт день, отсюда тёплая кайма вокруг светового пятна.","n.day|closed|off": "Шторы задёрнуты, свет выключен. Остаётся только рассеянный свет сквозь ткань. Картинка сереет и теряет направление, тени от мебели почти исчезают.","n.day|closed|on": "Шторы задёрнуты, свет включён. Лампа становится единственным ключевым источником: на полу полная тёплая лужа света, на стенах ясный градиент сверху вниз.","n.night|open|off": "Ночь, свет выключен, шторы открыты. Лишь след луны или фонаря. Формы читаются только силуэтом, окно — самое светлое место в кадре.","n.night|open|on": "Ночь, свет включён, шторы открыты. Тёплый интерьер против холодной синевы; окно превращается в чёрную дыру, тёплая лужа резко спадает. Самое драматичное состояние.","n.night|closed|off": "Ночь, свет выключен, шторы задёрнуты. Чёрный эталон: разделения едва хватает, чтобы читать контуры. Состояние «никого нет дома».","n.night|closed|on": "Ночь, свет включён, шторы задёрнуты. Тёплый свет отражается от ткани, спадает медленнее всего и обволакивает комнату. Картинка «дома» по умолчанию.","nameJoin": " "},"ko": {"lang": "언어","day": "낮","night": "밤","allOn": "전체 켜기","allOff": "전체 끄기","sample": "예시 불러오기","exportPng": "PNG 내보내기","exportHa": "Home Assistant로 내보내기","roomBlocks": "공간 블록","devices": "기기","noRoomSel": "선택된 공간 없음","dev.ceiling_light": "스마트 실링라이트","dev.dimmer": "디머 스위치","dev.smart_switch": "스마트 스위치","dev.curtain": "스마트 커튼","dev.roller": "롤블라인드","h.ceiling_light": "light · brightness + color_temp","h.dimmer": "light · brightness · 조명 밝기 조절","h.smart_switch": "switch · 켜기/끄기 · 조명 제어","h.curtain": "cover · curtain · position","h.roller": "cover · shade · position","room.living": "거실","room.dining": "다이닝룸","room.kitchen": "주방","room.master": "안방","room.bedroom": "침실","room.kids": "아이방","room.study": "서재","room.bath": "욕실","room.balcony": "발코니","room.entry": "현관","room.hall": "복도","center": "맞춤","pins": "엔티티 마커","roomNames": "공간 이름","isoGrid": "아이소 그리드","delSel": "선택 삭제","hud": "공간 블록을 끌어 놓으세요 · 간격은 자동 · 공간을 클릭해 선택 · 조명이나 스위치를 클릭해 전환 · D 키로 낮/밤 전환","floors": "층","addFloor": "+ 층 추가","delFloor": "층 삭제","emptyFloor": "비어 있음","moveUp": "위로","moveDown": "아래로","floorMeta": "{r}개 공간 · {e}개 엔티티","floorName": "{n}층","matrix": "조명 매트릭스","now": "현재","global": "전역","gBri": "조명 밝기","gCov": "커튼 개방도","roomsEntities": "공간과 엔티티","countFmt": "{r}개 공간 / {e}개 엔티티","noSelHint": "선택된 공간이 없어 이 층의 모든 엔티티를 표시합니다.","noEnt": "엔티티 없음","delRoom": "공간 삭제","bri": "밝기","pos": "개방도","roomLabel": "{n}개 엔티티 · {m}개 켜짐","noRooms": "이 층에는 아직 공간이 없습니다. 왼쪽에서 블록을 끌어 놓으세요.","mx.day": "낮","mx.night": "밤","mx.open": "커튼 열림","mx.closed": "커튼 닫힘","mx.on": "조명 켬","mx.off": "조명 끔","haTitle": "Home Assistant로 내보내기","haDesc": "실제로 동작하는 두 가지 경로입니다. picture-elements는 HA 기본 카드라 그대로 쓸 수 있고, ha-floorplan은 HACS가 필요하지만 이 SVG를 배경으로 삼아 entity_id로 바로 연결됩니다.","tab.img": "배경 이미지","close": "닫기","copyTab": "이 탭 복사","cb.pe": "기본 카드라 설치할 것이 없습니다. 먼저 PNG를 config/www/floorplan/home.png에 저장하세요.","cb.fp": "ha-floorplan 커스텀 카드용입니다(HACS에서 설치). 내보낸 SVG에서 각 마커의 id가 곧 entity_id입니다.","cb.css": "ha-floorplan 상태 스타일시트입니다. config/www/floorplan/home.css에 두세요.","cb.json": "HA의 floor / area / entity 레지스트리와 동형인, 에이전트 친화적 장면 기술입니다. AI가 이 JSON만 내놓으면 렌더가 만들어집니다.","cb.img": "config/www/floorplan/home.png에 저장하세요(/local/floorplan/home.png로 제공). 브라우저가 다운로드를 막으면 이미지에서 마우스 오른쪽 버튼으로 저장하세요.","pngTitle": "장면 PNG","pngDesc": "브라우저가 다운로드를 막으면(미리보기에서 흔합니다) 이미지에서 마우스 오른쪽 버튼으로 저장하세요.","renderFail": "렌더 실패","t.added": "기본 기기와 함께 「{n}」을(를) 추가했습니다","t.addedPlain": "「{n}」을(를) 추가했습니다","t.pickRoom": "먼저 공간을 선택하세요","t.addedEnt": "{id} 추가됨","t.floorOrder": "층 순서를 변경했습니다","t.floorAdded": "거실과 안방이 포함된 「{n}」을(를) 추가했습니다","t.floorDel": "「{n}」을(를) 삭제했습니다","t.keepOne": "최소 한 개 층은 남겨야 합니다","t.sample": "예시를 불러왔습니다","t.copied": "복사했습니다","t.selectCopy": "선택됨 — Ctrl/Cmd+C를 누르세요","t.needRooms": "먼저 공간을 몇 개 배치하세요","n.day|open|off": "자연광만 있는 상태. 창이 바닥에 선명한 차가운 빛 얼룩을 만들고, 그늘진 면은 반사광으로 밝아집니다. 개방적이고 고르며 대비는 중간입니다.","n.day|open|on": "낮에 조명까지 켠 상태. 두 광원이 겹쳐 가장 밝지만 가장 낭비이기도 합니다. 조명은 햇빛이 닿지 않는 곳에만 작용해 빛 얼룩 가장자리에 따뜻한 테두리가 생깁니다.","n.day|closed|off": "커튼을 치고 조명은 끈 상태. 천을 통과한 확산광만 남아 화면이 회색으로 가라앉고 방향감이 사라지며, 가구 그림자도 거의 없어집니다.","n.day|closed|on": "커튼을 치고 조명을 켠 상태. 조명이 유일한 주광이 되어 바닥에 완전한 따뜻한 빛 웅덩이가 생기고 벽에는 위아래로 뚜렷한 그러데이션이 나타납니다.","n.night|open|off": "밤, 조명은 끄고 커튼은 연 상태. 달빛이나 가로등의 흔적만 남아 형태는 실루엣으로만 읽히고, 창이 화면에서 가장 밝은 지점이 됩니다.","n.night|open|on": "밤, 조명을 켜고 커튼은 연 상태. 실내의 따뜻함과 바깥의 차가운 파랑이 강하게 대비되고 창은 블랙홀이 되며 빛 웅덩이가 급격히 떨어집니다. 가장 극적인 단계입니다.","n.night|closed|off": "밤, 조명은 끄고 커튼도 친 상태. 윤곽만 겨우 구분되는 완전한 어둠의 기준값으로, 「집에 아무도 없는」 상태를 비교할 때 씁니다.","n.night|closed|on": "밤, 조명을 켜고 커튼도 친 상태. 따뜻한 빛이 천에 반사되어 가장 느리게 감쇠하며 공간을 감쌉니다. 「집」의 기본 화면입니다.","nameJoin": " "},"ja": {"lang": "言語","day": "昼","night": "夜","allOn": "すべて点灯","allOff": "すべて消灯","sample": "サンプルを読み込む","exportPng": "PNG を書き出す","exportHa": "Home Assistant へ書き出す","roomBlocks": "部屋ブロック","devices": "デバイス","noRoomSel": "部屋が未選択","dev.ceiling_light": "スマートシーリングライト","dev.dimmer": "調光スイッチ","dev.smart_switch": "スマートスイッチ","dev.curtain": "スマートカーテン","dev.roller": "ロールスクリーン","h.ceiling_light": "light · brightness + color_temp","h.dimmer": "light · brightness · 照明を調光","h.smart_switch": "switch · オン/オフ · 照明を制御","h.curtain": "cover · curtain · position","h.roller": "cover · shade · position","room.living": "リビング","room.dining": "ダイニング","room.kitchen": "キッチン","room.master": "主寝室","room.bedroom": "寝室","room.kids": "子ども部屋","room.study": "書斎","room.bath": "浴室","room.balcony": "バルコニー","room.entry": "玄関","room.hall": "廊下","center": "全体表示","pins": "エンティティ標識","roomNames": "部屋名","isoGrid": "アイソグリッド","delSel": "選択を削除","hud": "部屋ブロックをドラッグ · 間隔は自動 · 部屋をクリックで選択 · 照明やスイッチをクリックで切替 · D キーで昼夜切替","floors": "階","addFloor": "+ 階を追加","delFloor": "この階を削除","emptyFloor": "空","moveUp": "上へ","moveDown": "下へ","floorMeta": "{r} 室 · {e} エンティティ","floorName": "{n}階","matrix": "光効マトリクス","now": "現在","global": "全体","gBri": "照明の明るさ","gCov": "カーテン開度","roomsEntities": "部屋とエンティティ","countFmt": "{r} 室 / {e} エンティティ","noSelHint": "部屋が未選択のため、この階のすべてのエンティティを表示しています。","noEnt": "エンティティなし","delRoom": "部屋を削除","bri": "明るさ","pos": "開度","roomLabel": "{n} エンティティ · {m} 点灯","noRooms": "この階にはまだ部屋がありません。左の列からブロックをドラッグしてください。","mx.day": "昼","mx.night": "夜","mx.open": "カーテン開","mx.closed": "カーテン閉","mx.on": "点灯","mx.off": "消灯","haTitle": "Home Assistant へ書き出す","haDesc": "実際に使える経路は 2 つです。picture-elements は HA 標準のカードでそのまま動きます。ha-floorplan は HACS が必要ですが、この SVG をそのまま下図にして entity_id で紐付けられます。","tab.img": "背景画像","close": "閉じる","copyTab": "このタブをコピー","cb.pe": "標準カードなので追加インストールは不要です。まず PNG を config/www/floorplan/home.png に保存してください。","cb.fp": "ha-floorplan カスタムカード用（HACS からインストール）。書き出した SVG では各標識の id がそのまま entity_id です。","cb.css": "ha-floorplan の状態スタイルシートです。config/www/floorplan/home.css に置いてください。","cb.json": "HA の floor / area / entity レジストリと同型の、エージェント向けシーン記述です。AI はこの JSON を出力するだけで効果図を生成できます。","cb.img": "config/www/floorplan/home.png に保存してください（/local/floorplan/home.png で配信）。ブラウザがダウンロードを妨げる場合は画像を右クリックして保存してください。","pngTitle": "シーン PNG","pngDesc": "ブラウザがダウンロードを妨げる場合（プレビューではよくあります）、画像を右クリックして保存してください。","renderFail": "描画に失敗しました","t.added": "「{n}」を既定のデバイス付きで追加しました","t.addedPlain": "「{n}」を追加しました","t.pickRoom": "先に部屋を選択してください","t.addedEnt": "{id} を追加しました","t.floorOrder": "階の順序を変更しました","t.floorAdded": "リビングと主寝室を配置した「{n}」を追加しました","t.floorDel": "「{n}」を削除しました","t.keepOne": "少なくとも 1 階は残してください","t.sample": "サンプルを読み込みました","t.copied": "コピーしました","t.selectCopy": "選択しました — Ctrl/Cmd+C を押してください","t.needRooms": "先に部屋をいくつか配置してください","n.day|open|off": "自然光のみ。窓が床に輪郭のはっきりした冷たい光の斑を落とし、影側の面は回り込む光で持ち上がります。開放的で均一、コントラストは中程度です。","n.day|open|on": "昼に点灯した状態。冷暖 2 つの光源が重なり、最も明るいと同時に最も無駄でもあります。照明は昼光の届かない場所にしか効かず、光の斑の縁に暖色の縁取りが現れます。","n.day|closed|off": "カーテンを閉じ消灯した状態。布を透ける拡散光だけが残り、画面は灰色に沈んで方向感を失い、家具の影もほとんど消えます。","n.day|closed|on": "カーテンを閉じ点灯した状態。照明が唯一の主光源となり、床には完全な暖色の光だまりが、壁には上下方向のはっきりした階調が生まれます。","n.night|open|off": "夜、消灯・カーテン開。月明かりや街灯のわずかな冷たい青だけが入り、家具は輪郭でしか判別できず、窓が画面で最も明るい場所になります。","n.night|open|on": "夜、点灯・カーテン開。室内の暖色と窓外の冷たい青が強く対比し、窓は「黒い穴」になり、暖色の光だまりは縁で急激に減衰します。最もドラマチックな一段です。","n.night|closed|off": "夜、消灯・カーテン閉。輪郭がかろうじて分かる程度の真っ暗な基準状態で、「誰も家にいない」状態の比較に使います。","n.night|closed|on": "夜、点灯・カーテン閉。暖色光が布に反射して室内に戻り、減衰が最も緩やかで包まれる感じが最も強い、「家」の既定の画面です。","nameJoin": ""}};
+
+/* 从 HA 导入 / 素材包 相关文案：先补中英，其余语言回落英文 */
+Object.assign(I18N.en,{
+  "importHa":"Import from HA","impTitle":"Import from Home Assistant",
+  "impDesc":"Nothing leaves this tab: HA renders your registry into JSON, you paste it back. Real area names and entity ids come with it. A scene.json exported earlier can be pasted here too.",
+  "impStep1":"1 · In HA: Developer tools → Template, paste this, copy the result on the right",
+  "impStep2":"2 · Paste the result here","impGo":"Import","rmEnt":"Remove from plan",
+  "unassigned":"Unassigned (give them an area in HA, then re-import)",
+  "t.imported":"Imported {a} rooms · {e} entities","t.unassigned":"{n} without an area","t.badJson":"That doesn't look like the template output or a scene.json",
+  "t.building":"Rendering the kit…","dlZip":"Download kit (.zip · {n} files)",
+  "tab.img":"Files",
+  "cb.img":"Unzip everything into config/www/floorplan/. {f}.png is the base (all lights off); each *-on.png is a room lit up, shown by the card only while that room's lights are on.",
+  "cb.pe":"Native card, nothing to install. Needs the kit files in config/www/floorplan/. Rooms light up with your real lights.",
+  "cb.fp":"For the HACS ha-floorplan card. Uses the .svg + home.css from the kit."
+});
+Object.assign(I18N.zh,{
+  "importHa":"从 HA 导入","impTitle":"从 Home Assistant 导入",
+  "impDesc":"数据不出这个标签页：让 HA 把注册表渲染成 JSON，你再贴回来。房间名和实体 ID 都是真实的。之前导出的 scene.json 也可以贴在这里读回。",
+  "impStep1":"1 · 在 HA：开发者工具 → 模板，粘贴下面这段，复制右侧结果",
+  "impStep2":"2 · 把结果贴到这里","impGo":"导入","rmEnt":"从户型图移除",
+  "unassigned":"未分配区域（在 HA 里给设备分好区域后重新导入）",
+  "t.imported":"已导入 {a} 个房间 · {e} 个实体","t.unassigned":"{n} 个没有区域","t.badJson":"这不像模板输出，也不像 scene.json",
+  "t.building":"正在渲染素材包…","dlZip":"下载素材包（.zip · {n} 个文件）",
+  "tab.img":"文件",
+  "cb.img":"整包解压到 config/www/floorplan/。{f}.png 是底图（全部灯灭）；每个 *-on.png 是一个房间的亮灯图层，只在该房间有灯亮时由卡片显示。",
+  "cb.pe":"HA 原生卡片，什么都不用装。素材包需放在 config/www/floorplan/。房间会跟着真实灯光亮灭。",
+  "cb.fp":"给 HACS 的 ha-floorplan 卡片用，需要素材包里的 SVG 和 home.css。"
+});
 
 function detectLang(){
   try{ var sv=localStorage.getItem('mk-lab-lang'); if(sv && I18N[sv]) return sv; }catch(e){}
@@ -539,9 +573,10 @@ var S={
 var seq=0; function uid(){ seq++; return seq; }
 
 /* 名称全部按当前语言派生：切语言 → 房间名 / 实体名 / 楼层名同步变 */
-function areaName(a){ return T('room.'+a.type) + (a.seq>1 ? ' '+a.seq : ''); }
-function entName(e){ var a=areaById(e.area_id); return (a?areaName(a):'') + T('nameJoin') + T('dev.'+e.kind); }
-function floorName(f){ return T('floorName',{n:(f.level||0)+1}); }
+/* 从 HA 导入的对象带真实名字（a.name / e.name / f.name），优先用它，不随界面语言变 */
+function areaName(a){ return a.name || (T('room.'+a.type) + (a.seq>1 ? ' '+a.seq : '')); }
+function entName(e){ if(e.name) return e.name; var a=areaById(e.area_id); return (a?areaName(a):'') + T('nameJoin') + T('dev.'+e.kind); }
+function floorName(f){ return f.name || T('floorName',{n:(f.level||0)+1}); }
 function renumberFloors(){ S.floors.forEach(function(f,k){ f.level=S.floors.length-1-k; }); }
 function slug(s,n){ return s+(n>1?'_'+n:''); }
 
@@ -594,7 +629,7 @@ function roomState(area){
   var lit=false, bri=0, n=0;
   es.forEach(function(e){
     if(e.domain==='light' && e.state==='on'){ lit=true; n++; bri=Math.max(bri,(e.attributes.brightness||255)/255); }
-    if(e.domain==='switch' && e.state==='on'){ lit=true; n++; bri=Math.max(bri,1); }
+    if(e.domain==='switch' && e.state==='on' && e.attributes.device_class!=='outlet'){ lit=true; n++; bri=Math.max(bri,1); }
   });
   var covers=es.filter(function(e){ return e.domain==='cover'; });
   var cov = covers.length ? covers.reduce(function(m,e){ return Math.max(m,(e.attributes.current_position||0)/100); },0) : 1;
@@ -867,7 +902,7 @@ function pinPos(area, e){
   return a.wall==='R' ? P(area.w*tt, -0.05, z) : P(-0.05, area.d*tt, z);
 }
 function drawPins(area){
-  if(!S.showPins) return '';
+  if(!(EXP ? EXP.pins : S.showPins)) return '';
   var s='';
   entOf(area).forEach(function(e){
     var p=pinPos(area,e), on = e.domain==='cover' ? (e.attributes.current_position>0) : e.state==='on';
@@ -937,10 +972,11 @@ function skyBackdrop(vb){
 
 function render(){
   defsHTML=''; gid=0;
-  var areas=visibleAreas().slice().sort(function(a,b){ return (a.x+a.y)-(b.x+b.y) || a.x-b.x; });
-  var body=skyBackdrop(viewBox());
+  var areas=visibleAreas().filter(function(a){ return !(EXP&&EXP.only) || a.area_id===EXP.only; }).slice().sort(function(a,b){ return (a.x+a.y)-(b.x+b.y) || a.x-b.x; });
+  var bare=!!(EXP&&EXP.bare);
+  var body=bare ? '' : skyBackdrop(viewBox());
 
-  if(S.showGrid){
+  if(S.showGrid && !EXP){
     var gg='';
     for(var i=-8;i<=34;i++){
       var A=P(i,-8), B=P(i,34), C=P(-8,i), D=P(34,i);
@@ -954,18 +990,18 @@ function render(){
   areas.forEach(function(a){
     var o=P(a.x,a.y,0), selq = S.sel&&S.sel.kind==='area'&&S.sel.id===a.area_id;
     var sh=P(a.x+a.w/2, a.y+a.d/2, 0);
-    body+='<ellipse cx="'+sh[0].toFixed(1)+'" cy="'+(sh[1]+6).toFixed(1)+'" rx="'+((a.w+a.d)*0.30*TW).toFixed(1)+'" ry="'+((a.w+a.d)*0.30*TH).toFixed(1)+'" fill="rgba(0,0,0,'+(S.tod==='night'?0.32:0.14)+')"/>';
+    if(!bare) body+='<ellipse cx="'+sh[0].toFixed(1)+'" cy="'+(sh[1]+6).toFixed(1)+'" rx="'+((a.w+a.d)*0.30*TW).toFixed(1)+'" ry="'+((a.w+a.d)*0.30*TH).toFixed(1)+'" fill="rgba(0,0,0,'+(S.tod==='night'?0.32:0.14)+')"/>';
     body+='<g class="roomg" data-aid="'+a.area_id+'" transform="translate('+o[0].toFixed(1)+','+o[1].toFixed(1)+')">';
     body+=drawRoom(a);
-    if(selq){
+    if(selq && !EXP){
       body+=poly([P(-WT,-WT,0),P(a.w,-WT,0),P(a.w,a.d,0),P(-WT,a.d,0)],'none')
             .replace('fill="none"','fill="none" stroke="'+getCSS('--accent')+'" stroke-width="2.5" stroke-dasharray="6 4"');
     }
-    if(S.showNames){
+    if(S.showNames && !bare){
       var lp=P(a.w/2, a.d, 0);
       body+='<text x="'+lp[0].toFixed(1)+'" y="'+(lp[1]+20).toFixed(1)+'" text-anchor="middle" font-size="12" font-weight="500" font-family="Archivo, Noto Sans, PingFang SC, Hiragino Sans, Malgun Gothic, sans-serif" fill="'+(S.tod==='night'?'#D6DEE6':'#39434C')+'">'+esc(areaName(a))+'</text>';
       var es=entOf(a), non=es.filter(function(e){ return e.domain==='cover'? e.attributes.current_position>0 : e.state==='on'; }).length;
-      body+='<text x="'+lp[0].toFixed(1)+'" y="'+(lp[1]+33).toFixed(1)+'" text-anchor="middle" font-size="9.5" font-family="DM Mono, monospace" fill="'+(S.tod==='night'?'#7D8B99':'#8A97A3')+'">'+esc(T('roomLabel',{n:es.length, m:non}))+'</text>';
+      if(!EXP) body+='<text x="'+lp[0].toFixed(1)+'" y="'+(lp[1]+33).toFixed(1)+'" text-anchor="middle" font-size="9.5" font-family="DM Mono, monospace" fill="'+(S.tod==='night'?'#7D8B99':'#8A97A3')+'">'+esc(T('roomLabel',{n:es.length, m:non}))+'</text>';
     }
     body+=drawPins(a);
     body+='</g>';
@@ -978,7 +1014,7 @@ function render(){
   if(S.tod==='night') vp.style.background='#12161C';
   document.getElementById('zoomval').textContent=Math.round(S.zoom*100)+'%';
 }
-var vbOverride=null;
+var vbOverride=null, EXP=null;   // EXP：导出时临时覆盖渲染选项（见 exportSVG）
 function viewBox(){
   if(vbOverride) return vbOverride;
   var W=vp.clientWidth||900, Hh=vp.clientHeight||600;
@@ -1320,6 +1356,7 @@ function renderRight(){
         '<span class="dot '+(on?'on':'off')+' mono">'+DEVT[e.kind].icon+'</span>'+
         '<span><span class="nm">'+esc(entName(e))+'</span><br><span class="eid mono">'+e.entity_id+'</span></span>'+
         '<button class="sw-toggle" data-eid="'+e.entity_id+'" aria-pressed="'+on+'"></button>'+
+        '<button class="x" data-rm="'+e.entity_id+'" title="'+esc(T('rmEnt'))+'" aria-label="'+esc(T('rmEnt'))+'">×</button>'+
         '</div>';
       if(!isCover && e.domain==='light' && on){
         html+='<div class="slider" style="margin:-2px 0 6px 31px"><label style="font-size:11px">'+esc(T('bri'))+'</label>'+
@@ -1338,6 +1375,9 @@ function renderRight(){
   });
   el.innerHTML=html;
   el.querySelectorAll('.sw-toggle').forEach(function(b){ b.addEventListener('click', function(){ toggleEntity(b.dataset.eid); }); });
+  el.querySelectorAll('[data-rm]').forEach(function(b){ b.addEventListener('click', function(){
+    S.entities=S.entities.filter(function(e){ return e.entity_id!==b.dataset.rm; }); select(S.sel);
+  }); });
   el.querySelectorAll('[data-bri]').forEach(function(r){
     r.addEventListener('input', function(){
       S.entities.forEach(function(e){ if(e.entity_id===r.dataset.bri) e.attributes.brightness=+r.value; });
@@ -1364,40 +1404,89 @@ function delSelected(){
 /* ═══════════════════════════════════════════════════════════
    11 · 导出
    ═══════════════════════════════════════════════════════════ */
-function contentBox(){
-  var A=visibleAreas(), x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;
-  A.forEach(function(a){
-    [[a.x-WT,a.y-WT,H+0.5],[a.x+a.w,a.y-WT,0],[a.x+a.w,a.y+a.d,0],[a.x-WT,a.y+a.d,0],[a.x+a.w,a.y+a.d,H]].forEach(function(c){
+function areaCorners(a){
+  return [[a.x-WT,a.y-WT,H+0.5],[a.x+a.w,a.y-WT,0],[a.x+a.w,a.y+a.d,0],[a.x-WT,a.y+a.d,0],[a.x+a.w,a.y+a.d,H]];
+}
+function boxOf(areas, pad, extraBottom){
+  var x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;
+  areas.forEach(function(a){
+    areaCorners(a).forEach(function(c){
       var p=P(c[0],c[1],c[2]); x0=Math.min(x0,p[0]); x1=Math.max(x1,p[0]); y0=Math.min(y0,p[1]); y1=Math.max(y1,p[1]);
     });
   });
-  var pad=46;
-  return {x:x0-pad, y:y0-pad, w:(x1-x0)+pad*2, h:(y1-y0)+pad*2+26};
+  return {x:x0-pad, y:y0-pad, w:(x1-x0)+pad*2, h:(y1-y0)+pad*2+(extraBottom||0)};
 }
-function exportSVG(){
-  var box=contentBox();
+function contentBox(){ return boxOf(visibleAreas(), 46, 26); }
+
+/* 真实 HA 里 switch 常常是插座（device_class: outlet），它开着不代表房间亮 */
+function isLighting(e){
+  return e.domain==='light' || (e.domain==='switch' && e.attributes.device_class!=='outlet');
+}
+
+/* opts: pins 画不画标记 · only 只画某个房间 · bare 透明底（不画天空/底色/阴影/房名）· lit 把该房间的灯全点亮 · dark 把全部灯关掉 */
+function exportSVG(opts){
+  opts=opts||{};
+  var box=opts.box||contentBox();
+  var saved=S.entities.map(function(e){ return e.state; });
+  S.entities.forEach(function(e){
+    if(!isLighting(e)) return;
+    if(opts.dark) e.state='off';
+    if(opts.lit && e.area_id===opts.only) e.state='on';
+  });
+  EXP={pins:!!opts.pins, only:opts.only||null, bare:!!opts.bare};
   vbOverride=[box.x, box.y, box.w, box.h];
   render();
   var bg = S.tod==='night'?'#12161C':LIGHT[lkey(S.tod,1,false)].bg;
   var out='<svg xmlns="http://www.w3.org/2000/svg" width="'+Math.round(box.w)+'" height="'+Math.round(box.h)+
-    '" viewBox="'+box.x+' '+box.y+' '+box.w+' '+box.h+'"><rect x="'+box.x+'" y="'+box.y+'" width="'+box.w+'" height="'+box.h+'" fill="'+bg+'"/>'+svg.innerHTML+'</svg>';
-  vbOverride=null; render();
+    '" viewBox="'+box.x+' '+box.y+' '+box.w+' '+box.h+'">'+
+    (opts.bare?'':'<rect x="'+box.x+'" y="'+box.y+'" width="'+box.w+'" height="'+box.h+'" fill="'+bg+'"/>')+svg.innerHTML+'</svg>';
+  EXP=null; vbOverride=null;
+  S.entities.forEach(function(e,i){ e.state=saved[i]; });
+  render();
   return {svg:out, box:box};
 }
-function exportPNG(cb){
-  var r=exportSVG(), scale=2;
-  var img=new Image();
+function rasterize(r, cb){
+  var scale=2, img=new Image();
   img.onload=function(){
     var c=document.createElement('canvas');
     c.width=Math.round(r.box.w*scale); c.height=Math.round(r.box.h*scale);
-    var g=c.getContext('2d'); g.drawImage(img,0,0,c.width,c.height);
-    cb(c.toDataURL('image/png'), r);
+    c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+    cb(c.toDataURL('image/png'));
   };
-  img.onerror=function(){ cb(null, r); };
+  img.onerror=function(){ cb(null); };
   img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(r.svg);
 }
+function exportPNG(cb){ var r=exportSVG({pins:S.showPins}); rasterize(r, function(u){ cb(u, r); }); }
 
-/* picture-elements：坐标换算成 viewBox 内百分比 */
+/* 一次性产出一整套 HA 素材：底图（全灭）· 每个有灯房间的亮灯图层 · ha-floorplan 用的 SVG */
+function buildHAKit(cb){
+  var fid=S.activeFloor, box=contentBox();
+  var base=exportSVG({box:box, dark:true});
+  var fp=exportSVG({box:box, pins:true});
+  var rooms=visibleAreas().filter(function(a){ return entOf(a).some(isLighting); });
+  var kit={fid:fid, box:box, v:Date.now().toString(36), files:[], layers:[]};
+  kit.files.push({name:fid+'.svg', text:fp.svg});
+  kit.files.push({name:'home.css', text:FLOORPLAN_CSS});
+  rasterize(base, function(u){
+    kit.base=u; kit.files.unshift({name:fid+'.png', dataURL:u});
+    var i=0;
+    (function next(){
+      if(i>=rooms.length){ cb(kit); return; }
+      var a=rooms[i++], rb=boxOf([a], 24, 0);
+      var r=exportSVG({box:rb, only:a.area_id, bare:true, lit:true});
+      rasterize(r, function(lu){
+        if(lu){
+          var name=fid+'-'+a.area_id+'-on.png';
+          kit.files.push({name:name, dataURL:lu});
+          kit.layers.push({area:a, name:name, box:rb});
+        }
+        next();
+      });
+    })();
+  });
+}
+
+/* picture-elements：坐标换算成底图内百分比 */
 function pinPercents(box){
   var out=[];
   visibleAreas().forEach(function(a){
@@ -1409,16 +1498,50 @@ function pinPercents(box){
   });
   return out;
 }
-function yamlPictureElements(box){
-  var pins=pinPercents(box);
+function pct(v){ return v.toFixed(2)+'%'; }
+function yamlPictureElements(kit){
+  var box=kit.box, dir='/local/floorplan/', q='?v='+kit.v;
   var L=[];
   L.push('# Generated by MK-Smart Home Lab — native picture-elements card, no custom components needed');
-  L.push('# 1) Save the exported PNG to config/www/floorplan/home.png');
-  L.push('# 2) Create a dashboard, switch it to YAML mode, paste this in');
+  L.push('# 1) Unzip the kit into config/www/floorplan/  (or save each file there by hand)');
+  L.push('# 2) Dashboard → Edit → Add card → Manual, paste this in');
+  L.push('# ?v= busts the browser cache — bump it whenever you re-export');
   L.push('type: picture-elements');
-  L.push('image: /local/floorplan/home.png');
+  L.push('image: '+dir+kit.fid+'.png'+q);
   L.push('elements:');
-  pins.forEach(function(p){
+  kit.layers.forEach(function(ly){
+    var es=entOf(ly.area).filter(isLighting);
+    L.push('  # '+areaName(ly.area)+' — lit layer, shown while any of its lights is on');
+    L.push('  - type: conditional');
+    L.push('    conditions:');
+    if(es.length===1){
+      L.push('      - condition: state');
+      L.push('        entity: '+es[0].entity_id);
+      L.push('        state: "on"');
+    } else {
+      L.push('      - condition: or');
+      L.push('        conditions:');
+      es.forEach(function(e){
+        L.push('          - condition: state');
+        L.push('            entity: '+e.entity_id);
+        L.push('            state: "on"');
+      });
+    }
+    L.push('    elements:');
+    L.push('      - type: image');
+    L.push('        image: '+dir+ly.name+q);
+    L.push('        tap_action:');
+    L.push('          action: none');
+    L.push('        hold_action:');
+    L.push('          action: none');
+    L.push('        style:');
+    L.push('          left: '+pct((ly.box.x-box.x)/box.w*100));
+    L.push('          top: '+pct((ly.box.y-box.y)/box.h*100));
+    L.push('          width: '+pct(ly.box.w/box.w*100));
+    L.push('          transform: none');
+    L.push('          pointer-events: none');
+  });
+  pinPercents(box).forEach(function(p){
     var e=p.e, isCover=e.domain==='cover';
     L.push('  - type: state-icon');
     L.push('    entity: '+e.entity_id);
@@ -1428,41 +1551,43 @@ function yamlPictureElements(box){
     L.push('    hold_action:');
     L.push('      action: more-info');
     L.push('    style:');
-    L.push('      top: '+p.top.toFixed(2)+'%');
-    L.push('      left: '+p.left.toFixed(2)+'%');
+    L.push('      top: '+pct(p.top));
+    L.push('      left: '+pct(p.left));
     L.push('      "--mdc-icon-size": 26px');
-    L.push('      "--paper-item-icon-color": "#7C8894"');
-    L.push('      "--paper-item-icon-active-color": "#E8A33C"');
+    L.push('      "--state-icon-color": "#7C8894"');
+    L.push('      "--state-'+e.domain+'-active-color": "'+(isCover?'#45C2CE':'#E8A33C')+'"');
   });
   return L.join('\n');
 }
-function yamlFloorplan(){
+function yamlFloorplan(kit){
   var L=[];
-  L.push('# Generated by MK-Smart Home Lab — config for ExperienceLovelace/ha-floorplan (HACS)');
+  L.push('# Generated by MK-Smart Home Lab — card for ExperienceLovelace/ha-floorplan (HACS)');
   L.push('# In the exported SVG every marker id IS its entity_id, so rules bind straight by id');
-  L.push('title: '+JSON.stringify(S.name));
-  L.push('image: /local/floorplan/home.svg');
-  L.push('stylesheet: /local/floorplan/home.css');
-  L.push('defaults:');
-  L.push('  hover_action: hover-info');
-  L.push('  tap_action: toggle');
-  L.push('rules:');
+  L.push('type: custom:floorplan-card');
+  L.push('full_height: true');
+  L.push('config:');
+  L.push('  image: /local/floorplan/'+kit.fid+'.svg');
+  L.push('  stylesheet: /local/floorplan/home.css');
+  L.push('  defaults:');
+  L.push('    hover_action: hover-info');
+  L.push('    tap_action: toggle');
+  L.push('  rules:');
   var doms={};
   S.entities.filter(function(e){ return e.floor_id===S.activeFloor; }).forEach(function(e){ (doms[e.domain]=doms[e.domain]||[]).push(e); });
   Object.keys(doms).forEach(function(dm){
-    L.push('  - name: '+dm+' devices');
-    L.push('    entities:');
-    doms[dm].forEach(function(e){ L.push('      - '+e.entity_id); });
-    L.push('    element: ${entity.entity_id}');
-    L.push('    tap_action: '+(dm==='cover'?'more-info':'toggle'));
-    L.push('    state_action:');
-    L.push('      service: floorplan.class_set');
+    L.push('    - name: '+dm+' devices');
+    L.push('      entities:');
+    doms[dm].forEach(function(e){ L.push('        - '+e.entity_id); });
+    L.push('      element: ${entity.entity_id}');
+    L.push('      tap_action: '+(dm==='cover'?'more-info':'toggle'));
+    L.push('      state_action:');
+    L.push('        service: floorplan.class_set');
     if(dm==='cover'){
-      L.push('      service_data: >');
-      L.push('        ${entity.attributes.current_position > 0 ? "cover-open" : "cover-closed"}');
+      L.push('        service_data: >');
+      L.push('          ${entity.attributes.current_position > 0 || entity.state === "open" ? "cover-open" : "cover-closed"}');
     } else {
-      L.push('      service_data: >');
-      L.push('        ${entity.state === "on" ? "'+dm+'-on" : "'+dm+'-off"}');
+      L.push('        service_data: >');
+      L.push('          ${entity.state === "on" ? "'+dm+'-on" : "'+dm+'-off"}');
     }
   });
   return L.join('\n');
@@ -1483,14 +1608,14 @@ function sceneJSON(){
   return JSON.stringify({
     schema:'iso-floorplan/1',
     home:{ name:S.name },
-    floors:S.floors.map(function(f){ return {floor_id:f.floor_id, name:floorName(f), level:f.level}; }),
+    floors:S.floors.map(function(f){ return {floor_id:f.floor_id, name:floorName(f), ha_name:f.name||null, level:f.level}; }),
     areas:S.areas.map(function(a){
-      return {area_id:a.area_id, name:areaName(a), floor_id:a.floor_id, room_type:a.type,
+      return {area_id:a.area_id, name:areaName(a), ha_name:a.name||null, floor_id:a.floor_id, room_type:a.type,
               layout:{x:a.x, y:a.y, w:a.w, d:a.d}};
     }),
     entities:S.entities.map(function(e){
       return {entity_id:e.entity_id, area_id:e.area_id, floor_id:e.floor_id, domain:e.domain,
-              device_kind:e.kind, friendly_name:entName(e), state:e.state,
+              device_kind:e.kind, friendly_name:entName(e), ha_name:e.name||null, state:e.state,
               attributes:e.attributes, anchor:e.anchor};
     }),
     scene:{ time_of_day:S.tod, light_matrix_key:currentKey(), locale:S.lang },
@@ -1498,26 +1623,73 @@ function sceneJSON(){
   }, null, 2);
 }
 
-var tabState='pe';
+/* ── 最小 zip（store，无压缩）：让一整套素材一次落地，不引依赖 ── */
+var CRC_T=(function(){ var t=[],c; for(var n=0;n<256;n++){ c=n; for(var k=0;k<8;k++) c=c&1?0xEDB88320^(c>>>1):c>>>1; t[n]=c>>>0; } return t; })();
+function crc32(u8){ var c=0xFFFFFFFF; for(var i=0;i<u8.length;i++) c=CRC_T[(c^u8[i])&255]^(c>>>8); return (c^0xFFFFFFFF)>>>0; }
+function fileBytes(f){
+  if(f.text!==undefined) return new TextEncoder().encode(f.text);
+  var b=atob(f.dataURL.split(',')[1]), u=new Uint8Array(b.length);
+  for(var i=0;i<b.length;i++) u[i]=b.charCodeAt(i);
+  return u;
+}
+function makeZip(files){
+  var parts=[], central=[], off=0;
+  function u16(v){ return [v&255,(v>>>8)&255]; }
+  function u32(v){ return [v&255,(v>>>8)&255,(v>>>16)&255,(v>>>24)&255]; }
+  files.forEach(function(f){
+    var name=new TextEncoder().encode(f.name), data=fileBytes(f), crc=crc32(data);
+    var common=[].concat(u16(20),u16(0x0800),u16(0),u16(0),u16(0x21),u32(crc),u32(data.length),u32(data.length),u16(name.length),u16(0));
+    var lh=new Uint8Array([].concat(u32(0x04034b50),common));
+    parts.push(lh,name,data);
+    central.push(new Uint8Array([].concat(u32(0x02014b50),u16(20),common,u16(0),u16(0),u16(0),u32(0),u32(off))), name);
+    off+=lh.length+name.length+data.length;
+  });
+  var csize=central.reduce(function(s,p){ return s+p.length; },0);
+  var end=new Uint8Array([].concat(u32(0x06054b50),u16(0),u16(0),u16(files.length),u16(files.length),u32(csize),u32(off),u16(0)));
+  return new Blob(parts.concat(central,[end]),{type:'application/zip'});
+}
+
+var tabState='img';
+function copyText(txt){
+  if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(function(){ toast(T('t.copied')); },function(){ selectCode(); });
+  else selectCode();
+}
+function selectCode(){
+  var el=document.getElementById('codeblk'); if(!el) return;
+  var rg=document.createRange(); rg.selectNodeContents(el);
+  var sel=window.getSelection(); sel.removeAllRanges(); sel.addRange(rg);
+  toast(T('t.selectCopy'));
+}
+function openModal(title, desc){
+  document.getElementById('modal-title').textContent=title;
+  document.getElementById('modal-desc').textContent=desc;
+  document.getElementById('modal').hidden=false;
+}
 function openHA(){
   if(!visibleAreas().length){ toast(T('t.needRooms')); return; }
-  exportPNG(function(dataURL, r){
-    var box=r.box;
+  toast(T('t.building'));
+  buildHAKit(function(kit){
+    var zipURL=URL.createObjectURL(makeZip(kit.files));
     var payload={
-      pe:{d:T('cb.pe'), c:yamlPictureElements(box)},
-      fp:{d:T('cb.fp'), c:yamlFloorplan()},
+      pe:{d:T('cb.pe'), c:yamlPictureElements(kit)},
+      fp:{d:T('cb.fp'), c:yamlFloorplan(kit)},
       css:{d:T('cb.css'), c:FLOORPLAN_CSS},
       json:{d:T('cb.json'), c:sceneJSON()}
     };
-    var order=[['pe','picture-elements'],['fp','floorplan.yaml'],['css','home.css'],['json','scene.json'],['img',T('tab.img')]];
+    var order=[['img',T('tab.img')],['pe','picture-elements'],['fp','floorplan-card'],['css','home.css'],['json','scene.json']];
     function paint(){
       var body='<div class="tabs">'+order.map(function(o){
         return '<button data-tab="'+o[0]+'" aria-selected="'+(tabState===o[0])+'">'+o[1]+'</button>';
       }).join('')+'</div>';
       if(tabState==='img'){
-        body+='<div class="callout">'+esc(T('cb.img'))+'</div>';
-        body+= dataURL ? '<a href="'+dataURL+'" download="home.png"><img src="'+dataURL+'" alt=""></a>'
-                       : '<div class="empty">'+esc(T('renderFail'))+'</div>';
+        body+='<div class="callout">'+esc(T('cb.img',{f:kit.fid}))+'</div>';
+        body+='<div class="dl"><a class="btn primary" href="'+zipURL+'" download="floorplan-'+kit.fid+'.zip">'+esc(T('dlZip',{n:kit.files.length}))+'</a>';
+        kit.files.forEach(function(f){
+          var href=f.dataURL || ('data:text/plain;charset=utf-8,'+encodeURIComponent(f.text));
+          body+='<a class="btn sm" href="'+href+'" download="'+esc(f.name)+'">'+esc(f.name)+'</a>';
+        });
+        body+='</div>';
+        body+= kit.base ? '<img src="'+kit.base+'" alt="">' : '<div class="empty">'+esc(T('renderFail'))+'</div>';
       } else {
         var p=payload[tabState];
         body+='<div class="callout">'+p.d+'</div><pre class="code" id="codeblk">'+esc(p.c)+'</pre>';
@@ -1528,22 +1700,140 @@ function openHA(){
         b.addEventListener('click', function(){ tabState=b.dataset.tab; paint(); });
       });
     }
-    document.getElementById('modal-title').textContent=T('haTitle');
-    document.getElementById('modal-desc').textContent=T('haDesc');
-    document.getElementById('modal').hidden=false;
+    openModal(T('haTitle'), T('haDesc'));
     paint();
-    document.getElementById('modal-copy').onclick=function(){
-      var txt=payload[tabState].c;
-      if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(function(){ toast(T('t.copied')); },function(){ selectCode(); });
-      else selectCode();
-    };
-    function selectCode(){
-      var el=document.getElementById('codeblk'); if(!el) return;
-      var rg=document.createRange(); rg.selectNodeContents(el);
-      var sel=window.getSelection(); sel.removeAllRanges(); sel.addRange(rg);
-      toast(T('t.selectCopy'));
-    }
+    document.getElementById('modal-copy').onclick=function(){ copyText(payload[tabState].c); };
   });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   11b · 从 HA 导入（开发者工具 → 模板 的输出）/ 读回 scene.json
+   编辑器保持纯离线：不连 HA、不要 token，数据由用户自己贴进来
+   ═══════════════════════════════════════════════════════════ */
+var HA_TEMPLATE = [
+"{#- MK-Smart Home Lab · paste into Developer tools → Template, copy the result -#}",
+"{%- set doms = ['light','switch','cover'] -%}",
+"{%- set ns = namespace(floors=[], areas=[], un=[]) -%}",
+"{%- for f in floors() -%}",
+"  {%- set ns.floors = ns.floors + [{'floor_id': f, 'name': floor_name(f)}] -%}",
+"{%- endfor -%}",
+"{%- for a in areas() -%}",
+"  {%- set es = namespace(l=[]) -%}",
+"  {%- for e in area_entities(a) if e.split('.')[0] in doms -%}",
+"    {%- set es.l = es.l + [{'entity_id': e, 'name': state_attr(e, 'friendly_name'), 'device_class': state_attr(e, 'device_class')}] -%}",
+"  {%- endfor -%}",
+"  {%- set ns.areas = ns.areas + [{'area_id': a, 'name': area_name(a), 'floor_id': floor_id(a), 'entities': es.l}] -%}",
+"{%- endfor -%}",
+"{%- for s in states if s.domain in doms and not area_id(s.entity_id) -%}",
+"  {%- set ns.un = ns.un + [{'entity_id': s.entity_id, 'name': s.name, 'device_class': s.attributes.get('device_class')}] -%}",
+"{%- endfor -%}",
+"{{ {'schema': 'ha-registry/1', 'floors': ns.floors, 'areas': ns.areas, 'unassigned': ns.un} | tojson }}"
+].join('\n');
+
+var ROOM_GUESS=[
+  ['kitchen',/厨|kitchen|küche|cuisine|cucina|cocina|keuken|キッチン|주방/],
+  ['bath',/卫生间|浴|厕|洗手|bath|toilet|\bwc\b|restroom|bagno|baño|badkamer|トイレ|욕실/],
+  ['master',/主卧|master/],
+  ['kids',/儿童|kid|child|nursery|enfant|kinder/],
+  ['bedroom',/卧|bed|schlaf|chambre|camera|dormitorio|slaap|寝室|침실/],
+  ['dining',/餐|dining|esszimmer|salle à manger|comedor|eetkamer/],
+  ['living',/客厅|起居|living|lounge|salon|wohn|soggiorno|sala|woonkamer|リビング|거실/],
+  ['study',/书房|工位|办公|study|office|desk|work|büro|bureau|studio|estudio|書斎|서재/],
+  ['balcony',/阳台|露台|balcon|terrace|patio|terrasse|ベランダ|발코니/],
+  ['entry',/玄关|入户|门厅|entr|foyer|porch|flur|ingresso|玄関|현관/],
+  ['hall',/走廊|过道|hall|corridor|garage|车库|gang|pasillo|corridoio|廊下|복도/]
+];
+function guessRoomType(name, id){
+  var s=(String(name||'')+' '+String(id||'')).toLowerCase();
+  for(var i=0;i<ROOM_GUESS.length;i++) if(ROOM_GUESS[i][1].test(s)) return ROOM_GUESS[i][0];
+  return 'living';
+}
+function importKind(domain, dc){
+  if(domain==='light') return 'ceiling_light';
+  if(domain==='switch') return 'smart_switch';
+  return dc==='curtain' ? 'curtain' : 'roller';
+}
+/* 真实房间里设备数量不定：灯沿天花板横排，开关左右两面墙交替、排满一行往上叠 */
+function spreadAnchors(area){
+  var t=ROOMT[area.type], es=entOf(area);
+  var lights=es.filter(function(e){ return e.kind==='ceiling_light'||e.kind==='dimmer'; });
+  lights.forEach(function(e,i){ e.anchor={mode:'ceiling', u:(i+1)/(lights.length+1), v:0.5}; });
+  es.filter(function(e){ return e.kind==='smart_switch'; }).forEach(function(e,i){
+    var j=i>>1;
+    e.anchor={mode:'wall', wall:i%2?'R':'L', t:0.18+(j%5)*0.16, z:1.22+Math.floor(j/5)*0.5};
+  });
+  es.filter(function(e){ return e.domain==='cover'; }).forEach(function(e){
+    var pref = e.kind==='curtain' ? ['R','L'] : ['L','R'];
+    var w = t.win.indexOf(pref[0])>=0 ? pref[0] : (t.win.indexOf(pref[1])>=0 ? pref[1] : null);
+    e.anchor = w ? {mode:'window', win:w} : {mode:'wall', wall:'R', t:0.5, z:1.9};
+  });
+}
+function importRegistry(data){
+  S.areas=[]; S.entities=[]; seq=0; S.sel=null;
+  var floors=(data.floors||[]).map(function(f){ return {floor_id:f.floor_id, name:f.name||null}; });
+  if(!floors.length) floors=[{floor_id:'floor_1'}];
+  S.floors=floors; renumberFloors();
+  var groups=(data.areas||[]).map(function(a){ return {id:a.area_id, name:a.name, floor:a.floor_id, ents:a.entities||[]}; });
+  if((data.unassigned||[]).length) groups.push({id:'_unassigned', name:T('unassigned'), floor:null, ents:data.unassigned, un:true});
+  S.floors.forEach(function(f){
+    S.activeFloor=f.floor_id;
+    groups.forEach(function(g){
+      var fl=g.floor && S.floors.some(function(x){ return x.floor_id===g.floor; }) ? g.floor : S.floors[0].floor_id;
+      if(fl!==f.floor_id) return;
+      /* 真实房间设备多：按数量放大（家具按固定坐标摆，放大只是多出空地） */
+      var type=g.un?'living':guessRoomType(g.name, g.id), t=ROOMT[type];
+      var n=g.ents.length, grow=n>8?2:(n>4?1:0), w=t.w+grow, d=t.d+grow, sp=freeSpot(w,d);
+      var a={area_id:g.id, seq:1, type:type, name:g.name, floor_id:fl, x:sp.x, y:sp.y, w:w, d:d, _k:uid()};
+      S.areas.push(a);
+      g.ents.forEach(function(x){
+        var dm=String(x.entity_id).split('.')[0];
+        if(['light','switch','cover'].indexOf(dm)<0 || S.entities.some(function(e){ return e.entity_id===x.entity_id; })) return;
+        var kind=importKind(dm, x.device_class), dt=DEVT[kind];
+        var e={entity_id:x.entity_id, area_id:a.area_id, floor_id:fl, domain:dm, kind:kind, name:x.name||null,
+               state:dm==='cover'?'open':'off', attributes:dt.attrs(), anchor:{mode:'ceiling',u:0.5,v:0.5}};
+        if(x.device_class) e.attributes.device_class=x.device_class;
+        if(dm==='cover') e.attributes.current_position=100;
+        S.entities.push(e);
+      });
+      spreadAnchors(a);
+    });
+  });
+  S.activeFloor=S.floors[0].floor_id;
+  return {areas:S.areas.length, entities:S.entities.length, un:(data.unassigned||[]).length};
+}
+function importScene(data){
+  S.floors=data.floors.map(function(f){ return {floor_id:f.floor_id, level:f.level, name:f.ha_name||null}; });
+  S.areas=data.areas.map(function(a){
+    var m=/_(\d+)$/.exec(a.area_id);
+    return {area_id:a.area_id, seq:m?+m[1]:1, type:ROOMT[a.room_type]?a.room_type:'living', name:a.ha_name||null,
+            floor_id:a.floor_id, x:a.layout.x, y:a.layout.y, w:a.layout.w, d:a.layout.d, _k:uid()};
+  });
+  S.entities=data.entities.filter(function(e){ return DEVT[e.device_kind]; }).map(function(e){
+    return {entity_id:e.entity_id, area_id:e.area_id, floor_id:e.floor_id, domain:e.domain, kind:e.device_kind,
+            name:e.ha_name||null, state:e.state, attributes:e.attributes||{}, anchor:e.anchor};
+  });
+  if(data.scene && data.scene.time_of_day) S.tod=data.scene.time_of_day;
+  S.activeFloor=S.floors[0].floor_id; S.sel=null;
+  return {areas:S.areas.length, entities:S.entities.length, un:0};
+}
+function openImport(){
+  openModal(T('impTitle'), T('impDesc'));
+  document.getElementById('modal-body').innerHTML=
+    '<h4>'+esc(T('impStep1'))+'</h4><pre class="code" id="codeblk">'+esc(HA_TEMPLATE)+'</pre>'+
+    '<h4>'+esc(T('impStep2'))+'</h4><textarea class="paste" id="imp-txt" spellcheck="false" placeholder=\'{"schema": "ha-registry/1", ...}\'></textarea>'+
+    '<div class="rowbtns" style="justify-content:flex-start"><button class="btn primary" id="imp-go">'+esc(T('impGo'))+'</button></div>';
+  var cp=document.getElementById('modal-copy'); cp.hidden=false; cp.onclick=function(){ copyText(HA_TEMPLATE); };
+  document.getElementById('imp-go').onclick=function(){
+    var data;
+    try{ data=JSON.parse(document.getElementById('imp-txt').value); }catch(err){ toast(T('t.badJson')); return; }
+    var r;
+    if(data && data.schema==='ha-registry/1') r=importRegistry(data);
+    else if(data && data.schema==='iso-floorplan/1') r=importScene(data);
+    else { toast(T('t.badJson')); return; }
+    syncTod(); renderFloorNav(); renderDevPal(); fitView(); renderRight();
+    document.getElementById('modal').hidden=true;
+    toast(T('t.imported',{a:r.areas, e:r.entities})+(r.un?' · '+T('t.unassigned',{n:r.un}):''));
+  };
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -1627,6 +1917,7 @@ function boot(){
   document.getElementById('zoom-out').onclick=function(){ S.zoom=Math.max(0.25,S.zoom/1.16); render(); };
   document.getElementById('zoom-fit').onclick=fitView;
   document.getElementById('btn-del').onclick=delSelected;
+  document.getElementById('btn-import').onclick=openImport;
   document.getElementById('btn-sample').onclick=function(){ loadSample(); fitView(); renderRight(); renderFloorNav(); renderDevPal(); toast(T('t.sample')); };
   document.getElementById('btn-ha').onclick=openHA;
   document.getElementById('btn-png').onclick=function(){

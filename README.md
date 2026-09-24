@@ -75,12 +75,14 @@ Works offline too — the only thing it ever fetches is a webfont.
 
 ### Getting it into Home Assistant
 
-1. Build your plan and set the scene state you want as the dashboard's resting look
-2. **Export to Home Assistant** → **Background** tab → save the PNG to `config/www/floorplan/home.png`
-3. **picture-elements** tab → copy the YAML
-4. In HA: new dashboard → YAML mode → paste
+1. **Import from HA** → copy the template into HA's *Developer tools → Template*, paste the result back. Your real areas, floors and entity ids arrive as rooms. (Nothing connects to HA; you do the copy-paste.) Remove anything you don't want on the plan with ×.
+2. Arrange rooms, pick day or night
+3. **Export to Home Assistant** → **Files** → download the kit and unzip it into `config/www/floorplan/`
+4. **picture-elements** tab → copy → in HA: *Add card → Manual* → paste
 
-Exported entity ids follow `<domain>.<area>_<device>`, e.g. `light.living_room_ceiling`. Rename them to match your real entities — or rename your real entities to match these and pretend you planned it that way.
+The kit is a base image with every light off, plus one transparent "lit" layer per room. The card shows a room's layer whenever any of its lights is on, so the plan lights up with your house. Switches with `device_class: outlet` don't count as lights.
+
+Re-export? Bump the `?v=` in the YAML so browsers drop the cached images. Pasting an old `scene.json` into **Import** brings a plan back for editing.
 
 ### How it actually works
 
@@ -156,12 +158,14 @@ open mk-ha-floorplan-editor/index.html
 
 ### 怎么接进 Home Assistant
 
-1. 摆好户型,把你想让面板平时长的样子调成当前场景
-2. **导出到 Home Assistant** → **背景图** 标签页 → 把 PNG 存到 `config/www/floorplan/home.png`
-3. **picture-elements** 标签页 → 复制 YAML
-4. 回到 HA:新建面板 → 切 YAML 模式 → 粘贴
+1. **从 HA 导入** → 把模板贴进 HA 的「开发者工具 → 模板」,再把右侧结果贴回来。你家真实的区域、楼层、实体 id 直接变成房间。(页面不连 HA,复制粘贴是你来。)不想上图的实体点 × 删掉
+2. 摆好房间,选白天还是黑夜
+3. **导出到 Home Assistant** → **文件** → 下载素材包,解压到 `config/www/floorplan/`
+4. **picture-elements** 标签页 → 复制 → 回到 HA:「添加卡片 → 手动」→ 粘贴
 
-导出的实体 id 是 `<domain>.<area>_<device>` 的形式,比如 `light.living_room_ceiling`。改成你家真实的实体名 —— 或者把你家的实体改成这个,然后假装你一开始就是这么规划的。
+素材包 = 一张全屋熄灯的底图 + 每个房间一张透明的「亮灯」图层。房间里任意一盏灯开着,卡片就显示那一层 —— 户型图跟着你家一起亮灭。`device_class: outlet` 的插座不算灯。
+
+重新导出后记得改一下 YAML 里的 `?v=`,不然浏览器会拿缓存的旧图。之前导出的 `scene.json` 贴进「导入」就能接着改。
 
 ### 里头是怎么跑的
 
